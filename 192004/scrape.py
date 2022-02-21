@@ -6,15 +6,27 @@ from pprint import pprint
 
 import requests
 
-FIELDNAMES = ["cms_certification_num", "payer", "code", "internal_revenue_code", "units", "description", "inpatient_outpatient", "price",
-        "code_disambiguator"]
+FIELDNAMES = [
+    "cms_certification_num",
+    "payer",
+    "code",
+    "internal_revenue_code",
+    "units",
+    "description",
+    "inpatient_outpatient",
+    "price",
+    "code_disambiguator",
+]
+
 
 def main():
-    cms_certification_num = '192004'
+    cms_certification_num = "192004"
 
-    resp = requests.get("https://kpcph.com/wp-content/uploads/2022/02/83-4190159_KPC-Promise-Hospital-of-Baton-Rouge-LLC_standardcharges.csv")
+    resp = requests.get(
+        "https://kpcph.com/wp-content/uploads/2022/02/83-4190159_KPC-Promise-Hospital-of-Baton-Rouge-LLC_standardcharges.csv"
+    )
     print(resp.url)
-    
+
     b_f = StringIO(resp.text)
 
     csv_reader = csv.reader(b_f)
@@ -45,7 +57,7 @@ def main():
             "internal_revenue_code": code,
             "units": "",
             "description": description,
-            "inpatient_outpatient": "INPATIENT", # XXX: is this right?
+            "inpatient_outpatient": "INPATIENT",  # XXX: is this right?
             "price": discounted,
             "code_disambiguator": "NONE",
         }
@@ -61,6 +73,7 @@ def main():
 
     b_f.close()
     out_f.close()
+
 
 if __name__ == "__main__":
     main()
