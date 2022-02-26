@@ -57,7 +57,7 @@ def main():
             "internal_revenue_code": code,
             "units": "",
             "description": description,
-            "inpatient_outpatient": "INPATIENT",  # XXX: is this right?
+            "inpatient_outpatient": "UNSPECIFIED",
             "price": discounted,
             "code_disambiguator": "NONE",
         }
