@@ -49,7 +49,7 @@ def main():
             "inpatient_outpatient": "UNSPECIFIED",
             "code_disambiguator": str(n),
             "price": price,
-            "payer": "",
+            "payer": "GROSS",
             "code": "NONE",
             "internal_revenue_code": "NONE",
         }
