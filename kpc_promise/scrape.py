@@ -19,19 +19,15 @@ FIELDNAMES = [
 ]
 
 
-def main():
-    cms_certification_num = "192004"
-
-    resp = requests.get(
-        "https://kpcph.com/wp-content/uploads/2022/02/83-4190159_KPC-Promise-Hospital-of-Baton-Rouge-LLC_standardcharges.csv"
-    )
+def process_chargemaster(cms_certification_num, url):
+    resp = requests.get(url)
     print(resp.url)
 
     b_f = StringIO(resp.text)
 
     csv_reader = csv.reader(b_f)
 
-    out_f = open("192004.csv", "w", encoding="utf-8")
+    out_f = open("{}.csv".format(cms_certification_num), "w", encoding="utf-8")
 
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES)
     csv_writer.writeheader()
@@ -74,6 +70,20 @@ def main():
     b_f.close()
     out_f.close()
 
+def main():
+    targets = {
+        "032006": "https://kpcph.com/wp-content/uploads/2022/02/83-4169286_KPC-Promise-Hospital-of-Phoenix-LLC_standardcharges.csv",
+        #"192004": "https://kpcph.com/wp-content/uploads/2022/02/83-4190159_KPC-Promise-Hospital-of-Baton-Rouge-LLC_standardcharges.csv",
+        "172004": "https://kpcph.com/wp-content/uploads/2022/02/83-4307959_KPC-Promise-Hospital-of-Overland-Park-LLC_standardcharges.csv",
+        "252008": "https://kpcph.com/wp-content/uploads/2022/02/83-4225974_KPC-Promise-Hospital-of-Vicksburg-LLC_standardcharges.csv",
+        "462004": "https://kpcph.com/wp-content/uploads/2022/02/83-4141873_KPC-Promise-Hospital-of-Salt-Lake-LLC_standardcharges.csv",
+        "452067": "https://kpcph.com/wp-content/uploads/2022/02/83-4250847_KPC-Promise-Hospital-of-Dallas-LLC_standardcharges.csv",
+        "452068": "https://kpcph.com/wp-content/uploads/2022/02/83-4295134_KPC-Promise-Hospital-of-Wichita-Falls-LLC_standardcharges.csv"
+    }
+
+    for cms_id in targets:
+        url = targets[cms_id]
+        process_chargemaster(cms_id, url)
 
 if __name__ == "__main__":
     main()
