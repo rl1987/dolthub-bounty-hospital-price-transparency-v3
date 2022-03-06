@@ -41,9 +41,14 @@ def main():
 
     payers = input_fieldnames[8:]
 
+    disamb = dict()
+
     for in_row in csv_reader:
         in_row_dict = dict(zip(input_fieldnames, in_row))
         
+        if len(in_row_dict) == 0:
+            break
+
         pprint(in_row_dict)
 
         code = in_row_dict.get("CPT HCPCS Code")
@@ -54,7 +59,13 @@ def main():
         if internal_revenue_code == "":
             internal_revenue_code = "NONE"
 
-        code_disambiguator = in_row_dict.get("Procedure Code")
+        code_disambiguator = disamb.get(code)
+        if code_disambiguator is None:
+            code_disambiguator = 1
+        else:
+            code_disambiguator += 1
+
+        disamb[code] = code_disambiguator
         
         units = in_row_dict.get("Rx Unit Multiplier")
         if units == "NA":
