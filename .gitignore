@@ -131,3 +131,5 @@ dmypy.json
 *.swp
 .DS_Store
 *.csv
+*.xslx
+*.json
