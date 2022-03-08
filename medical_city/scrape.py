@@ -48,10 +48,13 @@ def process_chargemaster(cms_certification_num, url):
         except:
             break
 
-        code = in_row.get("HCPCS/CPT Code")
+        code = in_row.get("HCPCS/CPT Code").strip()
         description = in_row.get("Description").strip()
         gross = in_row.get("Gross Charge")
         discounted = in_row.get("Discounted Cash Price (Gross Charges)")
+
+        if code == "":
+            code = "NONE"
 
         out_row = {
             "cms_certification_num": cms_certification_num,
