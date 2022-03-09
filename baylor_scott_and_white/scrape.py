@@ -124,7 +124,7 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        out_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.bswhealth.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(cms_id, url))
+        out_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.bswhealth.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
 
     out_f.close()
 
