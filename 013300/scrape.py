@@ -48,7 +48,7 @@ def main():
         if rev_code == '':
             rev_code = "NONE"
         
-        description = in_row.get("RevCd - Description").strip()
+        description = in_row.get("Charge Description").strip()
         
         if disamb.get(code) is None:
             code_disambiguator = 1
@@ -64,7 +64,7 @@ def main():
             "units": "",
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": description,
         }
 
         for payer in payers:
