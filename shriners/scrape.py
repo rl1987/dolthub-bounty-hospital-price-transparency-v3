@@ -152,7 +152,7 @@ def main():
 
         out_f.close()
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.shrinerschildrens.org/en", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";'.format(xlsx_url, csm_num))
+        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.shrinerschildrens.org/en", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(xlsx_url, csm_num))
 
     h_f.close()
 
