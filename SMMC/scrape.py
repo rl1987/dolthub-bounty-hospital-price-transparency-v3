@@ -51,6 +51,9 @@ def main():
         
         print(cur_price, discounted, hpsm_rate)
 
+        if cpt == "-":
+            cpt = "NONE"
+
         out_row = {
             "cms_certification_num": cms_certification_num,
             "units": "",
