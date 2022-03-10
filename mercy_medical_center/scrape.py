@@ -51,6 +51,8 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         if rev_code is None or rev_code == "":
             rev_code = "NONE"
+        else:
+            rev_code = int(rev_code)
 
         if price is None or price == "Charges":
             continue
