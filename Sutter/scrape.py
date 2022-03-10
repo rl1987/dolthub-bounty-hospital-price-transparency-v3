@@ -34,8 +34,6 @@ def process_chargemaster(cms_certification_num, url):
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES)
     csv_writer.writeheader()
 
-    disamb = dict()
-
     for in_row in csv_reader:
         payers = list(in_row.keys())[6:]
 
@@ -43,17 +41,11 @@ def process_chargemaster(cms_certification_num, url):
         if code == "":
             code = "NONE"
 
-        code_disambiguator = disamb.get(code)
-        if code_disambiguator is None:
-            code_disambiguator = 1
-        else:
-            code_disambiguator += 1
+        code_disambiguator = in_row.get("ID")
 
         rev_code = in_row.get("REVENUE_CODE")
         if rev_code == "":
             rev_code = "NONE"
-
-        disamb[code] = code_disambiguator
 
         inpatient_outpatient = in_row.get("SERVICE_SETTING")
         description = in_row.get("DESCRIPTION")
@@ -111,9 +103,15 @@ def main():
         "054096": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1952350944_SUTTER-CENTER-FOR-PSYCHIATRY_standardcharges.csv"
     }
 
+    h_f = open("hospitals.sql", "w")
+
     for cms_id in targets:
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
+
+        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.sutterhealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+
+    h_f.close()
 
 if __name__ == "__main__":
     main()
