@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)
     print(resp)
@@ -28,7 +29,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     wb = openpyxl.load_workbook(b_f)
     ws = wb.active
- 
+
     input_fieldnames = None
     payers = None
 
@@ -49,7 +50,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         description = in_row_dict.get("Item/Service Description")
         code = "NONE"
-        
+
         rev_code = in_row_dict.get("Billing Code")
 
         for payer in payers:
@@ -85,13 +86,14 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     b_f.close()
 
+
 def main():
     targets = {
         "012007": "https://nolandhospitals.com/wp-content/uploads/2020/12/473388048_Noland-Hospital-Montgomery_standardcharges.xlsx",
         "012009": "https://nolandhospitals.com/wp-content/uploads/2020/12/473385197_Noland-Hospital-Birmingham_standardcharges.xlsx",
         "012010": "https://nolandhospitals.com/wp-content/uploads/2020/12/472491675_Noland-Hospital-Dothan_standardcharges.xlsx",
         "012011": "https://nolandhospitals.com/wp-content/uploads/2020/12/472862505_Noland-Hospital-Anniston_standardcharges.xlsx",
-        "012012": "https://nolandhospitals.com/wp-content/uploads/2020/12/472847958_Noland-Hospital-Tuscaloosa_standardcharges.xlsx"
+        "012012": "https://nolandhospitals.com/wp-content/uploads/2020/12/472847958_Noland-Hospital-Tuscaloosa_standardcharges.xlsx",
     }
 
     for csm_num in targets.keys():
@@ -105,6 +107,7 @@ def main():
         scrape_hospital_data(csm_num, xlsx_url, csv_writer)
 
         out_f.close()
+
 
 if __name__ == "__main__":
     main()

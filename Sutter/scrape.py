@@ -25,7 +25,7 @@ def process_chargemaster(cms_certification_num, url):
 
     first_newline_at = resp.text.index("\n")
 
-    s_f = StringIO(resp.text[first_newline_at+1:])
+    s_f = StringIO(resp.text[first_newline_at + 1 :])
 
     csv_reader = csv.DictReader(s_f)
 
@@ -57,7 +57,7 @@ def process_chargemaster(cms_certification_num, url):
             "units": "",
             "description": description,
             "inpatient_outpatient": inpatient_outpatient,
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         for payer in payers:
@@ -77,13 +77,14 @@ def process_chargemaster(cms_certification_num, url):
 
             price = price.replace("$", "").replace(",", "").strip()
 
-            out_row['price'] = price
-            out_row['payer'] = payer
+            out_row["price"] = price
+            out_row["payer"] = payer
 
             pprint(out_row)
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -100,7 +101,7 @@ def main():
         "050714": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1689035628_SUTTER-MATERNITY-SURGERY-CENTER-OF-SANTA-CRUZ_standardcharges.csv",
         "050766": "https://www.sutterhealth.org/pdf/chargemaster/352182617-1336333954_SUTTER-NORTH-VALLEY-SURGICAL-HOSPITAL_standardcharges.csv",
         "051329": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1952634008_SUTTER-LAKESIDE-HOSPITAL_standardcharges.csv",
-        "054096": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1952350944_SUTTER-CENTER-FOR-PSYCHIATRY_standardcharges.csv"
+        "054096": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1952350944_SUTTER-CENTER-FOR-PSYCHIATRY_standardcharges.csv",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -109,9 +110,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.sutterhealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.sutterhealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     h_f.close()
+
 
 if __name__ == "__main__":
     main()

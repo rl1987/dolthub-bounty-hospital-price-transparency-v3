@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_certification_num, url):
     print(url)
 
@@ -36,7 +37,7 @@ def process_chargemaster(cms_certification_num, url):
 
     disamb = dict()
 
-    for data_dict in json_dict.get('data'):
+    for data_dict in json_dict.get("data"):
         if len(data_dict) == 0:
             continue
 
@@ -98,8 +99,9 @@ def process_chargemaster(cms_certification_num, url):
             row["price"] = max_price
             pprint(row)
             csv_writer.writerow(row)
-        
+
     out_f.close()
+
 
 def main():
     targets = {
@@ -115,10 +117,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        out_f.write('UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url.split("/wp-content")[0], url, cms_id))
+        out_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url.split("/wp-content")[0], url, cms_id
+            )
+        )
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

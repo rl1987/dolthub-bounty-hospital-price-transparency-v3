@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def fix_price(price_str):
     price_str = price_str.replace("$", "").replace(",", "").strip()
 
@@ -27,6 +28,7 @@ def fix_price(price_str):
         price_str = price_str.split(".")[0] + "." + price_str.split(".")[-1][:2]
 
     return price_str
+
 
 def process_chargemaster(cms_id, url):
     resp = requests.get(url)
@@ -82,7 +84,7 @@ def process_chargemaster(cms_id, url):
                 continue
 
             price = fix_price(price)
-            
+
             payer = payer.strip()
 
             if payer == "Gross Charge":
@@ -94,14 +96,15 @@ def process_chargemaster(cms_id, url):
             elif payer == "De-Identified Maximum Reimbursement*":
                 payer = "MAX"
 
-            out_row['price'] = price
-            out_row['payer'] = payer
+            out_row["price"] = price
+            out_row["payer"] = payer
 
             pprint(out_row)
 
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -115,19 +118,23 @@ def main():
         "670082": "https://www.bswhealth.com/SiteCollectionDocuments/patient-tools/estimate-cost-of-care/75-1037591_BAYLOR%20SCOTT%20&%20WHITE%20%20MEDICAL%20CENTER%20AT%20MCKINNEY_standardcharges.csv",
         "670108": "https://www.bswhealth.com/SiteCollectionDocuments/patient-tools/estimate-cost-of-care/46-4007700_BAYLOR%20SCOTT%20&%20WHITE%20%20MEDICAL%20CENTER%20AT%20MARBLE%20FALLS_standardcharges.csv",
         "670131": "https://www.bswhealth.com/SiteCollectionDocuments/patient-tools/estimate-cost-of-care/81-3040663_BAYLOR%20SCOTT%20&%20WHITE%20%20MEDICAL%20CENTER%20BUDA_standardcharges.csv",
-        "451374": "https://www.bswhealth.com/SiteCollectionDocuments/patient-tools/estimate-cost-of-care/74-1595711_BAYLOR%20SCOTT%20&%20WHITE%20%20MEDICAL%20CENTER%20AT%20TAYLOR_standardcharges.csv"
+        "451374": "https://www.bswhealth.com/SiteCollectionDocuments/patient-tools/estimate-cost-of-care/74-1595711_BAYLOR%20SCOTT%20&%20WHITE%20%20MEDICAL%20CENTER%20AT%20TAYLOR_standardcharges.csv",
     }
-    
+
     out_f = open("hospitals.sql", "w", encoding="utf-8")
 
     for cms_id in targets.keys():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        out_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.bswhealth.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        out_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.bswhealth.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

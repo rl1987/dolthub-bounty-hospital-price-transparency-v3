@@ -21,17 +21,14 @@ FIELDNAMES = [
 
 def process_chargemaster(cms_certification_num, url):
     proxy_url = "http://lum-customer-c_cecd546c-zone-zone_isp_hca:ef171xfs3a8w@zproxy.lum-superproxy.io:22225"
-    proxies = {
-        "http": proxy_url,
-        "https": proxy_url
-    }
+    proxies = {"http": proxy_url, "https": proxy_url}
 
     resp = requests.get(url, proxies=proxies)
     print(resp.url)
 
     first_newline_at = resp.text.find("\n")
 
-    s_f = StringIO(resp.text[first_newline_at+1:])
+    s_f = StringIO(resp.text[first_newline_at + 1 :])
 
     csv_reader = csv.DictReader(s_f)
 
@@ -42,7 +39,7 @@ def process_chargemaster(cms_certification_num, url):
 
     for in_row in csv_reader:
         pprint(in_row)
-    
+
         try:
             code_disambiguator = int(in_row.get("Procedure ID"))
         except:
@@ -79,6 +76,7 @@ def process_chargemaster(cms_certification_num, url):
 
     out_f.close()
 
+
 def main():
     targets = {
         "670103": "https://core.secure.ehc.com/src/util/detail-price-list/46-4027347_medical-city-alliance_standardcharges.csv",
@@ -91,12 +89,13 @@ def main():
         "450669": "https://core.secure.ehc.com/src/util/detail-price-list/62-1682210_medical-city-lewisville_standardcharges.csv",
         "450672": "https://core.secure.ehc.com/src/util/detail-price-list/62-1682202_medical-city-fort-worth_standardcharges.csv",
         "450675": "https://core.secure.ehc.com/src/util/detail-price-list/62-1682201_medical-city-arlington_standardcharges.csv",
-        "450822": "https://core.secure.ehc.com/src/util/detail-price-list/62-1650582_medical-city-las-colinas_standardcharges.csv"
+        "450822": "https://core.secure.ehc.com/src/util/detail-price-list/62-1650582_medical-city-las-colinas_standardcharges.csv",
     }
 
     for cms_id in targets:
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
+
 
 if __name__ == "__main__":
     main()

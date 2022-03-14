@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_certification_num, url):
     resp = requests.get(url)
     print(resp.url)
@@ -34,14 +35,14 @@ def process_chargemaster(cms_certification_num, url):
     next(csv_reader)
     next(csv_reader)
     next(csv_reader)
-    
+
     input_fieldnames = next(csv_reader)
 
     payers = input_fieldnames[8:]
 
     for in_row in csv_reader:
         in_row_dict = dict(zip(input_fieldnames, in_row))
-        
+
         if len(in_row_dict) == 0:
             break
 
@@ -56,7 +57,7 @@ def process_chargemaster(cms_certification_num, url):
             internal_revenue_code = "NONE"
 
         code_disambiguator = in_row_dict.get("Procedure Code")
-        
+
         units = in_row_dict.get("Rx Unit Multiplier")
         if units == "NA":
             units = ""
@@ -97,7 +98,7 @@ def process_chargemaster(cms_certification_num, url):
                 payer = "MIN"
             elif payer == "De-identified maximum negotiated charge":
                 payer = "MAX"
-            
+
             out_row["payer"] = payer
             out_row["price"] = price
 
@@ -105,6 +106,7 @@ def process_chargemaster(cms_certification_num, url):
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -123,7 +125,7 @@ def main():
         "051301": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbTHTEHACHAPICA&type=CDMWithoutLabel",
         "050784": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAHTTULARECA&type=CDMWithoutLabel",
         "050301": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbUkiahValleyCA&type=CDMWithoutLabel",
-        "054074": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAHSHSAINTHELENACA&type=CDMWithoutLabel", # XXX: mistaken link on the site?
+        "054074": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAHSHSAINTHELENACA&type=CDMWithoutLabel",  # XXX: mistaken link on the site?
         "120006": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAHCKAILUAHI&type=CDMWithoutLabel",
         "380060": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAMCPORTLANDOR&type=CDMWithoutLabel",
         "381317": "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbAHTTILLAMOOKOR&type=CDMWithoutLabel",
@@ -135,10 +137,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.adventisthealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.adventisthealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     h_f.close()
 
+
 if __name__ == "__main__":
     main()
-

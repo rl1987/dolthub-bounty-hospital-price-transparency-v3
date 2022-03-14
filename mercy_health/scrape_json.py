@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_certification_num, url):
     print(url)
 
@@ -61,41 +62,42 @@ def process_chargemaster(cms_certification_num, url):
 
         for k in entry.keys():
             if k == "IP Price":
-                row['payer'] = "GROSS CHARGE"
-                row['price'] = "{:.2f}".format(entry[k])
-                row['inpatient_outpatient'] = "INPATIENT"
+                row["payer"] = "GROSS CHARGE"
+                row["price"] = "{:.2f}".format(entry[k])
+                row["inpatient_outpatient"] = "INPATIENT"
                 csv_writer.writerow(row)
                 pprint(row)
-                row['inpatient_outpatient'] = "UNSPECIFIED"
+                row["inpatient_outpatient"] = "UNSPECIFIED"
             elif k == "OP Price":
-                row['payer'] = "GROSS CHARGE"
-                row['price'] = "{:.2f}".format(entry[k])
-                row['inpatient_outpatient'] = "OUTPATIENT"
+                row["payer"] = "GROSS CHARGE"
+                row["price"] = "{:.2f}".format(entry[k])
+                row["inpatient_outpatient"] = "OUTPATIENT"
                 csv_writer.writerow(row)
                 pprint(row)
-                row['inpatient_outpatient'] = "UNSPECIFIED"
+                row["inpatient_outpatient"] = "UNSPECIFIED"
             elif k == "<Self-pay>":
-                row['payer'] = "CASH PRICE"
-                row['price'] = "{:.2f}".format(entry[k])
+                row["payer"] = "CASH PRICE"
+                row["price"] = "{:.2f}".format(entry[k])
                 csv_writer.writerow(row)
                 pprint(row)
             elif k == "Min":
-                row['payer'] = "MIN"
-                row['price'] = "{:.2f}".format(entry[k])
+                row["payer"] = "MIN"
+                row["price"] = "{:.2f}".format(entry[k])
                 csv_writer.writerow(row)
                 pprint(row)
             elif k == "Max":
-                row['payer'] = "MAX"
-                row['price'] = "{:.2f}".format(entry[k])
+                row["payer"] = "MAX"
+                row["price"] = "{:.2f}".format(entry[k])
                 csv_writer.writerow(row)
                 pprint(row)
             elif "[" in k:
-                row['payer'] = k
-                row['price'] = "{:.2f}".format(entry[k])
+                row["payer"] = k
+                row["price"] = "{:.2f}".format(entry[k])
                 csv_writer.writerow(row)
                 pprint(row)
-        
+
     out_f.close()
+
 
 def main():
     targets = {
@@ -103,7 +105,7 @@ def main():
         "360001": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/310537085_anderson_standardcharges.ashx?la=en",
         "360236": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/310830955_clermont_standardcharges.ashx?la=en",
         "360056": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/310538532_fairfield_standardcharges.ashx?la=en",
-        "360234": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/311091597_west_standardcharges.ashx?la=en", 
+        "360234": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/311091597_west_standardcharges.ashx?la=en",
         "360066": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/341105619_stritas_standardcharges.ashx?la=en",
         "361306": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/340864230_mercy-health-allen_standardcharges.ashx?la=en",
         "360172": "https://www.mercy.com/-/media/mercy/patient-resources/hospital-pricing-transparency/340714704_lorain_standardcharges.ashx?la=en",
@@ -121,10 +123,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        out_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.mercy.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        out_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.mercy.com", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

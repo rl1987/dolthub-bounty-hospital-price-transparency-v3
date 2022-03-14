@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)
     print(resp)
@@ -28,11 +29,11 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     wb = openpyxl.load_workbook(b_f)
     ws = wb.active
-    
+
     for in_row in ws.rows:
         if len(in_row) < 4:
             continue
-        
+
         if in_row[0].value == "CDM\nNumber":
             continue
 
@@ -66,13 +67,14 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
             "price": price,
-            "code_disambiguator": int(in_row[0].value)
+            "code_disambiguator": int(in_row[0].value),
         }
 
         pprint(out_row)
         csv_writer.writerow(out_row)
 
     b_f.close()
+
 
 def main():
     targets = {
@@ -92,6 +94,7 @@ def main():
         scrape_hospital_data(csm_num, xlsx_url, csv_writer)
 
         out_f.close()
+
 
 if __name__ == "__main__":
     main()

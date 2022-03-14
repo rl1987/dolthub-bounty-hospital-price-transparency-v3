@@ -20,8 +20,10 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def is_number(price):
     return re.match("\d+(\.\d{2})", price) is not None
+
 
 def process_chargemaster(cms_id, url):
     resp = requests.get(url)
@@ -57,7 +59,7 @@ def process_chargemaster(cms_id, url):
         negotiated = in_row[6]
         negotiated_min = in_row[7]
         negotiated_max = in_row[8]
- 
+
         if code.endswith(".0"):
             code = code.replace(".0", "")
 
@@ -102,7 +104,7 @@ def process_chargemaster(cms_id, url):
             prev_min = min_rates.get(description)
             if prev_min is None or negotiated_min < prev_min:
                 min_rates[description] = negotiated_min
-        
+
         if is_number(negotiated_max):
             prev_max = max_rates.get(description)
             if prev_max is None or negotiated_max > prev_max:
@@ -123,26 +125,27 @@ def process_chargemaster(cms_id, url):
 
         min_rate = min_rates.get(description)
         if min_rate is not None:
-            out_row['payer'] = "MIN"
-            out_row['price'] = min_rate
+            out_row["payer"] = "MIN"
+            out_row["price"] = min_rate
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         max_rate = max_rates.get(description)
         if max_rate is not None:
-            out_row['payer'] = "MAX"
-            out_row['price'] = max_rate
+            out_row["payer"] = "MAX"
+            out_row["price"] = max_rate
             pprint(out_row)
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
         "330024": "https://www.mountsinai.org/files/MSHealth/Assets/HS/About/Insurance/131624096_mount-sinai-hospital_standardcharges.csv",
         "330169": "https://www.mountsinai.org/files/MSHealth/Assets/HS/About/Insurance/135564934_mount-sinai-beth-israel_standardcharges.csv",
         "330046": "https://www.mountsinai.org/files/MSHealth/Assets/HS/About/Insurance/132997301_mount-sinai-morningside_west_standardcharges.csv",
-        "330198": "https://www.mountsinai.org/files/MSHealth/Assets/HS/About/Insurance/111352310_mount-sinai-south-nassau_standardcharges.csv"
+        "330198": "https://www.mountsinai.org/files/MSHealth/Assets/HS/About/Insurance/111352310_mount-sinai-south-nassau_standardcharges.csv",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -150,11 +153,15 @@ def main():
     for cms_id in targets.keys():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
-    
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.mountsinai.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.mountsinai.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     h_f.close()
 
+
 if __name__ == "__main__":
     main()
-

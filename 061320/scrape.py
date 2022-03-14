@@ -20,10 +20,13 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def main():
     cms_certification_num = "061320"
 
-    resp = requests.get("https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbGVHGUNNISONCO&type=CDMWithoutLabel")
+    resp = requests.get(
+        "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbGVHGUNNISONCO&type=CDMWithoutLabel"
+    )
     print(resp.url)
 
     csv_reader = csv.reader(StringIO(resp.text))
@@ -36,7 +39,7 @@ def main():
     next(csv_reader)
     next(csv_reader)
     next(csv_reader)
-    
+
     input_fieldnames = next(csv_reader)
 
     payers = input_fieldnames[8:]
@@ -45,7 +48,7 @@ def main():
 
     for in_row in csv_reader:
         in_row_dict = dict(zip(input_fieldnames, in_row))
-        
+
         if len(in_row_dict) == 0:
             break
 
@@ -66,7 +69,7 @@ def main():
             code_disambiguator += 1
 
         disamb[code] = code_disambiguator
-        
+
         units = in_row_dict.get("Rx Unit Multiplier")
         if units == "NA":
             units = ""
@@ -107,7 +110,7 @@ def main():
                 payer = "MIN"
             elif payer == "De-identified maximum negotiated charge":
                 payer = "MAX"
-            
+
             out_row["payer"] = payer
             out_row["price"] = price
 
@@ -116,6 +119,6 @@ def main():
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

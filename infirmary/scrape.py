@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)
     print(resp)
@@ -28,16 +29,16 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     wb = openpyxl.load_workbook(b_f)
     ws = wb.active
-    
+
     for in_row in ws.rows:
         if len(in_row) < 3:
             continue
-        
+
         if in_row[0].value == "Procedure" or str(in_row[0].value).startswith("Update"):
             continue
 
         code_disambiguator = in_row[0].value
-        
+
         if len(in_row) == 5:
             code = in_row[1].value
 
@@ -77,12 +78,13 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     b_f.close()
 
+
 def main():
     targets = {
         "012006": "https://www.infirmaryhealth.org/documents/price%20transparency%20files/Ltac-Charge-Master.xlsx",
         "010113": "https://www.infirmaryhealth.org/documents/Price%20Transparency%20Files/Mobile-Infirmary-Charge-Master.xlsx",
         "010129": "https://www.infirmaryhealth.org/documents/price%20transparency%20files/North-Baldwin-Infirmary-Charge-Master.xlsx",
-        "010100": "https://www.infirmaryhealth.org/documents/price%20transparency%20files/Thomas-Hospital-Charge-Master.xlsx"
+        "010100": "https://www.infirmaryhealth.org/documents/price%20transparency%20files/Thomas-Hospital-Charge-Master.xlsx",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -98,9 +100,14 @@ def main():
         scrape_hospital_data(csm_num, xlsx_url, csv_writer)
 
         out_f.close()
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.infirmaryhealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(xlsx_url, csm_num))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.infirmaryhealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                xlsx_url, csm_num
+            )
+        )
 
     h_f.close()
+
 
 if __name__ == "__main__":
     main()

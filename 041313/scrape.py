@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def main():
     cms_certification_num = "041313"
 
@@ -27,7 +28,9 @@ def main():
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer.writeheader()
 
-    resp = requests.get("https://www.ozarkhealth.net/sites/default/files/2021-01/1%2019%2021%20Pricing%20Transparency%20Data.xlsx")
+    resp = requests.get(
+        "https://www.ozarkhealth.net/sites/default/files/2021-01/1%2019%2021%20Pricing%20Transparency%20Data.xlsx"
+    )
     print(resp.url)
 
     b_f = BytesIO(resp.content)
@@ -43,7 +46,7 @@ def main():
         if in_fieldnames is None:
             in_fieldnames = values
             continue
-        
+
         in_row_dict = dict(zip(in_fieldnames, values))
 
         pprint(in_row_dict)
@@ -92,7 +95,10 @@ def main():
             csv_writer.writerow(out_row)
 
         for k in in_row_dict.keys():
-            if k.startswith("Payer Negotiated Charge: ") and in_row_dict.get(k) is not None:
+            if (
+                k.startswith("Payer Negotiated Charge: ")
+                and in_row_dict.get(k) is not None
+            ):
                 out_row["payer"] = k.replace("Payer Negotiated Charge: ", "")
                 out_row["price"] = in_row_dict[k]
                 pprint(out_row)
@@ -100,6 +106,6 @@ def main():
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

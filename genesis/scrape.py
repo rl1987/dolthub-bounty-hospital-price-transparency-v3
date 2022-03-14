@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_certification_num, url):
     resp = requests.get(url)
     print(resp.url)
@@ -30,7 +31,7 @@ def process_chargemaster(cms_certification_num, url):
 
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer.writeheader()
-    
+
     for in_row in csv_reader:
         payers = list(in_row.keys())[6:]
 
@@ -53,7 +54,7 @@ def process_chargemaster(cms_certification_num, url):
             "units": "",
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         for payer in payers:
@@ -72,13 +73,14 @@ def process_chargemaster(cms_certification_num, url):
             elif payer == "BLIND_HIGH":
                 payer = "MAX"
 
-            out_row['price'] = price
-            out_row['payer'] = payer
+            out_row["price"] = price
+            out_row["payer"] = payer
 
             pprint(out_row)
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -94,10 +96,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.genesishealth.com/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.genesishealth.com/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     h_f.close()
 
+
 if __name__ == "__main__":
     main()
-

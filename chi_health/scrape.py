@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_id, url):
     resp = requests.get(url)
     print(resp.url)
@@ -57,6 +58,7 @@ def process_chargemaster(cms_id, url):
 
     out_f.close()
 
+
 def main():
     targets = {
         "160028": "https://www.chihealth.com/content/dam/chi-health/website/documents/cost-estimates/Charges_CSVreport_11_Jan_2021_CB.csv",
@@ -79,6 +81,6 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
+
 if __name__ == "__main__":
     main()
-

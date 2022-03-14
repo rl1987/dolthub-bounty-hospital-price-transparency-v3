@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_certification_num, url):
     resp = requests.get(url)
     print(resp.url)
@@ -48,7 +49,7 @@ def process_chargemaster(cms_certification_num, url):
             code_disambiguator = "NONE"
         else:
             code_disambiguator = code_disambiguator[0]
-    
+
         description = in_row.xpath("./Description/text()")
         if len(description) == 0:
             description = "NONE"
@@ -62,13 +63,13 @@ def process_chargemaster(cms_certification_num, url):
             "units": "",
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         for child in in_row.iterchildren():
             key = child.tag
             value = child.text
-            
+
             if value == "" or value is None:
                 continue
 
@@ -88,12 +89,13 @@ def process_chargemaster(cms_certification_num, url):
             if payer is None:
                 continue
 
-            out_row['payer'] = payer
-            out_row['price'] = value
+            out_row["payer"] = payer
+            out_row["price"] = value
             pprint(out_row)
             csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -105,7 +107,7 @@ def main():
         "140223": "https://www.advocatehealth.com/assets/documents/hospital-pricing-information/362169147_advocate-lutheran-general-hospital_standardcharges.xml",
         "140030": "https://www.advocatehealth.com/assets/documents/hospital-pricing-information/362167920_advocate-sherman-hospital_standardcharges.xml",
         "140250": "https://www.advocatehealth.com/assets/documents/hospital-pricing-information/362169147_advocate-south-suburban-hospital_standardcharges.xml",
-        "140048": "https://www.advocatehealth.com/assets/documents/hospital-pricing-information/362169147_advocate-trinity-hospital_standardcharges.xml"
+        "140048": "https://www.advocatehealth.com/assets/documents/hospital-pricing-information/362169147_advocate-trinity-hospital_standardcharges.xml",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -114,10 +116,14 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.advocatehealth.com/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(url, cms_id))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.advocatehealth.com/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
     h_f.close()
 
+
 if __name__ == "__main__":
     main()
-

@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def main():
     cms_certification_num = "030131"
 
@@ -39,7 +40,7 @@ def main():
 
     disamb = dict()
 
-    for data_dict in json_dict.get('data'):
+    for data_dict in json_dict.get("data"):
         if len(data_dict) == 0:
             continue
 
@@ -101,9 +102,9 @@ def main():
             row["price"] = max_price
             pprint(row)
             csv_writer.writerow(row)
-        
+
     out_f.close()
+
 
 if __name__ == "__main__":
     main()
-

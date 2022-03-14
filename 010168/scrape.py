@@ -19,12 +19,15 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def main():
     cms_certification_num = "010168"
 
-    resp = requests.get("https://pricetransparency.blob.core.windows.net/jackhughston/33-1058243_jackhughstonmemorialhospital_standardcharges.csv")
+    resp = requests.get(
+        "https://pricetransparency.blob.core.windows.net/jackhughston/33-1058243_jackhughstonmemorialhospital_standardcharges.csv"
+    )
     print(resp.url)
+
 
 if __name__ == "__main__":
     main()
-

@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def fix_price(price_str):
     price_str = price_str.replace("$", "").replace(",", "").strip()
 
@@ -27,6 +28,7 @@ def fix_price(price_str):
         price_str = price_str.split(".")[0] + "." + price_str.split(".")[-1][:2]
 
     return price_str
+
 
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)
@@ -37,7 +39,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     wb = openpyxl.load_workbook(b_f)
     ws = wb.active
- 
+
     input_fieldnames = None
     payers = None
 
@@ -68,7 +70,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
         code = in_row_dict.get("CPT")
         if code == "" or code is None:
             code = "NONE"
-        
+
         rev_code = in_row_dict.get("RevCode")
         if rev_code is None:
             rev_code = in_row_dict.get("REV CODE")
@@ -113,14 +115,15 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
                     inpatient_outpatient = "OUTPATIENT"
                     payer = payer.replace("OP Rate", "").strip()
 
-            out_row['inpatient_outpatient'] = inpatient_outpatient
-            out_row['payer'] = payer
-            out_row['price'] = price
+            out_row["inpatient_outpatient"] = inpatient_outpatient
+            out_row["payer"] = payer
+            out_row["price"] = price
 
             pprint(out_row)
             csv_writer.writerow(out_row)
 
     b_f.close()
+
 
 def main():
     targets = {
@@ -152,9 +155,14 @@ def main():
 
         out_f.close()
 
-        h_f.write('UPDATE `hospitals` SET `homepage_url` = "https://www.shrinerschildrens.org/en", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(xlsx_url, csm_num))
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.shrinerschildrens.org/en", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                xlsx_url, csm_num
+            )
+        )
 
     h_f.close()
+
 
 if __name__ == "__main__":
     main()
