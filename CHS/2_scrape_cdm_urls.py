@@ -63,6 +63,7 @@ def main():
 
             out_row = dict(in_row)
             out_row["cdm_url"] = cdm_url
+            out_row['web_url'] = web_url
 
             pprint(out_row)
             csv_writer.writerow(out_row)
