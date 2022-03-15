@@ -19,7 +19,8 @@ OVERRIDES = {
     'https://www.theduponthospital.com/Uploads/Public/Documents/charge-masters/621801445_Dupont_standardcharges.csv': "150150",
     'https://www.physiciansregional.com/Uploads/Public/Documents/charge-masters/204401957_Physicians%20Regional%20Pine%20Ridge_standardcharges.csv': "100286",
     'https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/522379881_NW%20Oro%20Valley_standardcharges.csv': "030114",
-    "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/621762430_NW%20Tucson_standardcharges.csv": "030085"
+    "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/621762430_NW%20Tucson_standardcharges.csv": "030085",
+    "https://www.merithealthwomanshospital.com/Uploads/Public/Documents/charge-masters/640780035_Merit%20Woman's_standardcharges.csv": "250136",
 }
 
 def write_output_row(csv_writer, cdm_url, ccn, web_url):
@@ -73,14 +74,14 @@ def main():
         res = db.sql('SELECT `cms_certification_num` FROM `hospitals` WHERE `address` LIKE "%{}%" AND `state` LIKE "{}" and `zip5` LIKE "{}";'.format(street_addr.replace("-", "").replace(".", ""), state, zipcode), result_format='json')
 
         if len(res['rows']) == 1:
-            write_output_row(csv_writer, res['rows'][0]['cms_certification_num'], cdm_url, web_url)
+            write_output_row(csv_writer, cdm_url, res['rows'][0]['cms_certification_num'], web_url)
             continue
         
         name = in_row.get("name")
 
         res = db.sql('SELECT `cms_certification_num` FROM `hospitals` WHERE `name` LIKE "%{}%";'.format(name.strip()), result_format='json')
         if len(res['rows']) == 1:
-            write_output_row(csv_writer, res['rows'][0]['cms_certification_num'], cdm_url, web_url)
+            write_output_row(csv_writer, cdm_url, res['rows'][0]['cms_certification_num'], web_url)
             continue
 
         print("Found no matching CCN for:")
