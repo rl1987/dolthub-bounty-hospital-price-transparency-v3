@@ -7,15 +7,15 @@ from pprint import pprint
 import js2xml
 import requests
 
-FIELDNAMES = [ "name", "street_addr", "city", "zipcode", "phone", "bed_count", "web_url" ]
+FIELDNAMES = ["name", "street_addr", "city", "zipcode", "phone", "bed_count", "web_url"]
+
 
 def main():
-    params = {
-        "callback": "locationDataCallback",
-        "_": int(time.time())
-    }
+    params = {"callback": "locationDataCallback", "_": int(time.time())}
 
-    resp = requests.get("https://www.chslocationsmap.com/data/map/default/locations.json", params=params)
+    resp = requests.get(
+        "https://www.chslocationsmap.com/data/map/default/locations.json", params=params
+    )
     print(resp.url)
 
     parsed = js2xml.parse(resp.text)
@@ -38,16 +38,17 @@ def main():
             bed_count = h.xpath('.//property[@name="bedCount"]/number/@value')[0]
         except:
             bed_count = None
+
         web_url = h.xpath('.//property[@name="websiteUrl"]/string/text()')[0]
 
         row = {
-            'name': name,
-            'street_addr': street_addr,
-            'city': city,
-            'zipcode': zipcode,
-            'phone': phone,
-            'bed_count': bed_count,
-            'web_url': web_url
+            "name": name,
+            "street_addr": street_addr,
+            "city": city,
+            "zipcode": zipcode,
+            "phone": phone,
+            "bed_count": bed_count,
+            "web_url": web_url,
         }
 
         pprint(row)
@@ -56,6 +57,6 @@ def main():
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

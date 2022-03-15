@@ -7,7 +7,16 @@ from urllib.parse import urljoin
 import requests
 from lxml import html
 
-FIELDNAMES = [ "name", "street_addr", "city", "zipcode", "phone", "bed_count", "web_url", "cdm_url" ]
+FIELDNAMES = [
+    "name",
+    "street_addr",
+    "city",
+    "zipcode",
+    "phone",
+    "bed_count",
+    "web_url",
+    "cdm_url",
+]
 
 OVERRIDES = {
     "Tennova Healthcare – Clarksville": "http://www.tennovaclarksville.com/",
@@ -21,6 +30,7 @@ OVERRIDES = {
     "Poplar Bluff Regional Medical Center": "https://www.pbrmc.com/",
 }
 
+
 def main():
     in_f = open("locations.csv", "r", encoding="utf-8")
 
@@ -32,7 +42,7 @@ def main():
     csv_writer.writeheader()
 
     for in_row in csv_reader:
-        name = in_row.get('name')
+        name = in_row.get("name")
         web_url = in_row.get("web_url")
         if OVERRIDES.get(name) is not None:
             web_url = OVERRIDES.get(name)
@@ -51,7 +61,7 @@ def main():
             cdm_url = urljoin(resp.url, cdm_link.get("href").replace(" ", "%20"))
 
             out_row = dict(in_row)
-            out_row['cdm_url'] = cdm_url
+            out_row["cdm_url"] = cdm_url
 
             pprint(out_row)
             csv_writer.writerow(out_row)
@@ -59,6 +69,6 @@ def main():
     in_f.close()
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-
