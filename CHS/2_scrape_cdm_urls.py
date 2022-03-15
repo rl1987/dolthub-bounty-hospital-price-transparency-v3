@@ -11,6 +11,7 @@ FIELDNAMES = [
     "name",
     "street_addr",
     "city",
+    "state",
     "zipcode",
     "phone",
     "bed_count",

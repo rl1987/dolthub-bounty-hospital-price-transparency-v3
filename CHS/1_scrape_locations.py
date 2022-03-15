@@ -7,7 +7,7 @@ from pprint import pprint
 import js2xml
 import requests
 
-FIELDNAMES = ["name", "street_addr", "city", "zipcode", "phone", "bed_count", "web_url"]
+FIELDNAMES = ["name", "street_addr", "city", "state", "zipcode", "phone", "bed_count", "web_url"]
 
 
 def main():
@@ -29,6 +29,7 @@ def main():
         name = h.xpath('.//property[@name="name"]/string/text()')[0]
         street_addr = h.xpath('.//property[@name="street"]/string/text()')[0]
         city = h.xpath('.//property[@name="city"]/string/text()')[0]
+        state = h.xpath("../../../../@name")[0]
         zipcode = h.xpath('.//property[@name="zip"]/string/text()')[0]
         phone = h.xpath('.//property[@name="phone"]/string/text()')[0]
         if "<" in phone:
@@ -45,6 +46,7 @@ def main():
             "name": name,
             "street_addr": street_addr,
             "city": city,
+            "state": state,
             "zipcode": zipcode,
             "phone": phone,
             "bed_count": bed_count,
