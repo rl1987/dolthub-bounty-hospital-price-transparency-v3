@@ -58,7 +58,7 @@ def main():
             "units": "",
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
-            "code_disambiguator": "NONE",
+            "code_disambiguator": description,
         }
 
         for payer in payers:
