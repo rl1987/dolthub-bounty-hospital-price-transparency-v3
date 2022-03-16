@@ -88,19 +88,6 @@ def process_chargemaster(cms_certification_num, url):
 
 def main():
     targets = {
-        "050014": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1447494323_SUTTER-AMADOR-HOSPITAL_standardcharges.csv",
-        "050101": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1366686248_SUTTER-SOLANO-MEDICAL-CENTER_standardcharges.csv",
-        "050108": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1811946734_SUTTER-MEDICAL-CENTER-SACRAMENTO_standardcharges.csv",
-        "050291": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1740413798_SUTTER-SANTA-ROSA-REGIONAL-HOSPITAL_standardcharges.csv",
-        "050309": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1356390264_SUTTER-ROSEVILLE-MEDICAL-CENTER_standardcharges.csv",
-        "050313": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1821442864_SUTTER-TRACY-COMMUNITY-HOSPITAL_standardcharges.csv",
-        "050417": "https://www.sutterhealth.org/pdf/chargemaster/942988520-1700960267_SUTTER-COAST-HOSPITAL_standardcharges.csv",
-        "050498": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1194774299_SUTTER-AUBURN-FAITH-HOSPITAL_standardcharges.csv",
-        "050523": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1467808659_SUTTER-DELTA-MEDICAL-CENTER_standardcharges.csv",
-        "050537": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1770532608_SUTTER-DAVIS-HOSPITAL_standardcharges.csv",
-        "050714": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1689035628_SUTTER-MATERNITY-SURGERY-CENTER-OF-SANTA-CRUZ_standardcharges.csv",
-        "050766": "https://www.sutterhealth.org/pdf/chargemaster/352182617-1336333954_SUTTER-NORTH-VALLEY-SURGICAL-HOSPITAL_standardcharges.csv",
-        "051329": "https://www.sutterhealth.org/pdf/chargemaster/940562680-1952634008_SUTTER-LAKESIDE-HOSPITAL_standardcharges.csv",
         "054096": "https://www.sutterhealth.org/pdf/chargemaster/941156621-1952350944_SUTTER-CENTER-FOR-PSYCHIATRY_standardcharges.csv",
     }
 
