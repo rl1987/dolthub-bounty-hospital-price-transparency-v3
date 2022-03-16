@@ -34,22 +34,32 @@ def process_chargemaster(cms_id, url):
 
     for in_row in csv_reader:
         code = in_row.get("CPT Code").strip()
+        if code == "-":
+            code = "NONE"
+
         internal_revenue_code = in_row.get("Revenue Code").strip()
         price = in_row.get("Charge").strip()
+
+        if price == "-" or price == "":
+            continue
 
         if code == "" or internal_revenue_code == "" or price == "":
             continue
 
+        code_disambiguator = in_row.get("CDM Number").strip()
+        if code_disambiguator == "":
+            code_disambiguator = "NONE"
+
         out_row = {
             "cms_certification_num": cms_id,
-            "payer": "GROSS",
+            "payer": "GROSS CHARGE",
             "code": code,
             "internal_revenue_code": internal_revenue_code,
             "units": "",
             "description": in_row.get("Code Description").strip(),
             "inpatient_outpatient": "UNSPECIFIED",
             "price": price,
-            "code_disambiguator": "NONE",
+            "code_disambiguator": code_disambiguator,
         }
 
         pprint(out_row)
@@ -77,10 +87,18 @@ def main():
         "281346": "https://www.chihealth.com/content/dam/chi-health/website/documents/cost-estimates/Charges_CSVreport_11_Jan_2021_Plainview.csv",
     }
 
+    h_f = open("hospitals.sql", "w")
+
     for cms_id in targets.keys():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
+        h_f.write(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.chihealth.com/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                url, cms_id
+            )
+        )
 
+    h_f.close()
 if __name__ == "__main__":
     main()
