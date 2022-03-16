@@ -7,7 +7,16 @@ from pprint import pprint
 import js2xml
 import requests
 
-FIELDNAMES = ["name", "street_addr", "city", "state", "zipcode", "phone", "bed_count", "web_url"]
+FIELDNAMES = [
+    "name",
+    "street_addr",
+    "city",
+    "state",
+    "zipcode",
+    "phone",
+    "bed_count",
+    "web_url",
+]
 
 
 def main():

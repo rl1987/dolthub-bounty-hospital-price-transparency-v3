@@ -96,6 +96,7 @@ def main():
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
 
+
 # update prices set internal_revenue_code = code_disambiguator, code_disambiguator = internal_revenue_code where cms_certification_num in (select cms_certification_num from hospitals where homepage_url = 'https://medicalcityhealthcare.com/home/');
 
 
