@@ -44,8 +44,6 @@ def main():
 
     payers = input_fieldnames[8:]
 
-    disamb = dict()
-
     for in_row in csv_reader:
         in_row_dict = dict(zip(input_fieldnames, in_row))
 
@@ -62,14 +60,6 @@ def main():
         if internal_revenue_code == "":
             internal_revenue_code = "NONE"
 
-        code_disambiguator = disamb.get(code)
-        if code_disambiguator is None:
-            code_disambiguator = 1
-        else:
-            code_disambiguator += 1
-
-        disamb[code] = code_disambiguator
-
         units = in_row_dict.get("Rx Unit Multiplier")
         if units == "NA":
             units = ""
@@ -82,6 +72,10 @@ def main():
             inpatient_outpatient = "INPATIENT"
         elif price_tier == "Outpatient":
             inpatient_outpatient = "OUTPATIENT"
+
+        code_disambiguator = in_row_dict.get("Procedure Code")
+        if code_disambiguator == "":
+            code_disambiguator = "NONE"
 
         out_row = {
             "cms_certification_num": cms_certification_num,
