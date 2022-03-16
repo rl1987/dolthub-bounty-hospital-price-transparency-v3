@@ -21,6 +21,12 @@ OVERRIDES = {
     "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/522379881_NW%20Oro%20Valley_standardcharges.csv": "030114",
     "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/621762430_NW%20Tucson_standardcharges.csv": "030085",
     "https://www.merithealthwomanshospital.com/Uploads/Public/Documents/charge-masters/640780035_Merit%20Woman's_standardcharges.csv": "250136",
+    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/205896848_NW%20Springdale_standardcharges.csv": "042009",
+    "https://www.braverahealth.com/Uploads/Public/Documents/charge-masters/200195256_Seven%20Rivers_standardcharges.csv": "100249",
+    "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/274564798_Scranton_standardcharges.csv": "390237",
+    "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/452672023_Moses%20Taylor_standardcharges.csv": "390119",
+    "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/263632648_Wilkes-Barre_standardcharges.csv": "390137",
+    "https://www.alliancehealthdurant.com/Uploads/Public/Documents/charge-masters/383862800_Alliance%20Madill_standardcharges.csv": "371326",
 }
 
 
@@ -29,6 +35,11 @@ def write_output_row(csv_writer, cdm_url, ccn, web_url):
     pprint(row)
     csv_writer.writerow(row)
 
+def update_ccn_count(counts, ccn):
+    if counts.get(ccn) is None:
+        counts[ccn] = 1
+    else:
+        counts[ccn] += 1
 
 def main():
     in_f = open("cdm_urls.csv", "r")
@@ -39,6 +50,8 @@ def main():
     csv_writer.writeheader()
 
     seen_cdm_urls = set()
+
+    counts = dict()
 
     if len(sys.argv) == 2:
         db = dolt.Dolt(sys.argv[1])
@@ -57,6 +70,7 @@ def main():
         if OVERRIDES.get(cdm_url) is not None:
             ccn = OVERRIDES.get(cdm_url)
             write_output_row(csv_writer, cdm_url, ccn, web_url)
+            update_ccn_count(counts, ccn)
             continue
 
         phone_number = (
@@ -82,6 +96,7 @@ def main():
                     cdm_url,
                     web_url,
                 )
+                update_ccn_count(counts, ccn)
                 continue
 
         street_addr = in_row.get("street_addr")
@@ -96,9 +111,11 @@ def main():
         )
 
         if len(res["rows"]) == 1:
+            ccn = res["rows"][0]["cms_certification_num"]
             write_output_row(
-                csv_writer, cdm_url, res["rows"][0]["cms_certification_num"], web_url
+                csv_writer, cdm_url, ccn, web_url
             )
+            update_ccn_count(counts, ccn)
             continue
 
         name = in_row.get("name")
@@ -110,9 +127,11 @@ def main():
             result_format="json",
         )
         if len(res["rows"]) == 1:
+            ccn = res["rows"][0]["cms_certification_num"]
             write_output_row(
-                csv_writer, cdm_url, res["rows"][0]["cms_certification_num"], web_url
+                csv_writer, cdm_url, ccn, web_url
             )
+            update_ccn_count(counts, ccn)
             continue
 
         print("Found no matching CCN for:")
@@ -121,6 +140,10 @@ def main():
     in_f.close()
     out_f.close()
 
+    print("Duplicates:")
+    for ccn in counts.keys():
+        if counts[ccn] > 1:
+            print(ccn, counts[ccn])
 
 if __name__ == "__main__":
     main()
