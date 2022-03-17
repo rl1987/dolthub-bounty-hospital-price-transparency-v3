@@ -131,7 +131,6 @@ def main():
         "360082": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714593_euclid-hospital_standardcharges.csv",
         "360077": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714618_fairview-hospital_standardcharges.csv",
         "360230": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714593_hillcrest-hospital_standardcharges.csv",
-        #"100105": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/592496294_indian-river-hospital_standardcharges.xlsx",
         "361303": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340718390_lodi-hospital_standardcharges.csv",
         "360087": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714684_lutheran-hospital_standardcharges.csv",
         "360143": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714458_marymount-hospital_standardcharges.csv",

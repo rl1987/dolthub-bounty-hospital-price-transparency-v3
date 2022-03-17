@@ -56,6 +56,8 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         description = in_row_dict.get("CDM_Svc_Descr")
         code = in_row_dict.get("HCPC/Cpt_Cd")
+        if code == "N/A":
+            code = "NONE"
         rev_code = in_row_dict.get("Rev_Cd")
         code_disambiguator = "NONE"
         units = in_row_dict.get("Quantity/Units")
