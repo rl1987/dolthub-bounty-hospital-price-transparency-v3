@@ -46,6 +46,7 @@ OVERRIDES = {
     "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/452672023_Moses%20Taylor_standardcharges.csv": "390119",
     "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/263632648_Wilkes-Barre_standardcharges.csv": "390137",
     "https://www.alliancehealthdurant.com/Uploads/Public/Documents/charge-masters/383862800_Alliance%20Madill_standardcharges.csv": "371326",
+    "https://www.merithealthriverregion.com/Uploads/Public/Documents/charge-masters/621752111_Merit%20River%20Region_standardcharges.csv": "250031",
 }
 
 
