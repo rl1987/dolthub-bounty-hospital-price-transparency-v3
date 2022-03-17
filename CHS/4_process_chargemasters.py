@@ -107,6 +107,8 @@ def process_chargemaster(cms_certification_num, url):
             else:
                 out_row["payer"] = payer
                 out_row["price"] = price
+                pprint(out_row)
+                csv_writer.writerow(out_row)
 
     out_f.close()
 
