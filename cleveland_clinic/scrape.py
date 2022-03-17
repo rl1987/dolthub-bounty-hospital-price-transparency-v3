@@ -51,9 +51,15 @@ def process_chargemaster(cms_id, url):
 
     for in_row in csv_reader:
         code = in_row.get("Code").split(' ')[-1]
+        if code == "" or code == "N/A":
+            code = "NONE"
         internal_revenue_code = in_row.get("Rev Code").split(" - ")[0]
+        if internal_revenue_code == "" or internal_revenue_code == "N/A":
+            internal_revenue_code == "NONE"
         description = in_row.get("Procedure Description")
         code_disambiguator = in_row.get("Procedure")
+        if code_disambiguator == "":
+            code_disambiguator = "NONE"
         payer = in_row.get("Payer")
         gross_ip_price = in_row.get("IP_Charge")
         discounted_ip_price = in_row.get("IP_Selfpay")
