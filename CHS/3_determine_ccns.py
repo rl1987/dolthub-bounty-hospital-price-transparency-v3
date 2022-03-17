@@ -6,7 +6,26 @@ import sys
 
 import doltcli as dolt
 
-FIELDNAMES = ["cdm_url", "ccn", "web_url"]
+FIELDNAMES = [
+    "name",
+    "street_addr",
+    "city",
+    "state",
+    "zipcode",
+    "phone",
+    "bed_count",
+    "web_url",
+    "cdm_url",
+    "ccn",
+    "db_name",
+    "db_street_addr",
+    "db_city",
+    "db_state",
+    "db_zipcode",
+    "db_phone",
+    "db_bed_count",
+]
+
 
 OVERRIDES = {
     "https://www.tennovanorthknoxville.com/Uploads/Public/Documents/charge-masters/452535623_Tennova%20North%20Knoxville_standardcharges.csv": "440120",
@@ -30,8 +49,21 @@ OVERRIDES = {
 }
 
 
-def write_output_row(csv_writer, cdm_url, ccn, web_url):
-    row = {"cdm_url": cdm_url, "ccn": ccn, "web_url": web_url}
+def update_row(old_row, db_row):
+    updated_row = dict(old_row)
+
+    updated_row['ccn'] = db_row['cms_certification_num']
+    updated_row['db_name'] = db_row['name']
+    updated_row['db_street_addr'] = db_row['address']
+    updated_row['db_city'] = db_row['city']
+    updated_row['db_state'] = db_row['state']
+    updated_row['db_zipcode'] = db_row['zip5']
+    updated_row['db_phone'] = db_row['phone_number']
+    updated_row['db_bed_count'] = db_row['beds']
+
+    return updated_row
+
+def write_output_row(csv_writer, row):
     pprint(row)
     csv_writer.writerow(row)
 
@@ -69,7 +101,10 @@ def main():
 
         if OVERRIDES.get(cdm_url) is not None:
             ccn = OVERRIDES.get(cdm_url)
-            write_output_row(csv_writer, cdm_url, ccn, web_url)
+            res = db.sql('SELECT * FROM `hospitals` WHERE `cms_certification_num` = "{}";'.format(ccn), result_format="json")
+            write_output_row(
+                csv_writer, update_row(in_row, res["rows"][0])
+            )
             update_ccn_count(counts, ccn)
             continue
 
@@ -83,18 +118,16 @@ def main():
 
         if phone_number != "":
             res = db.sql(
-                'SELECT `cms_certification_num` FROM `hospitals` WHERE `phone_number` = "{}";'.format(
+                'SELECT * FROM `hospitals` WHERE `phone_number` = "{}";'.format(
                     phone_number
                 ),
                 result_format="json",
             )
 
             if len(res["rows"]) == 1:
+                ccn = res["rows"][0]["cms_certification_num"]
                 write_output_row(
-                    csv_writer,
-                    res["rows"][0]["cms_certification_num"],
-                    cdm_url,
-                    web_url,
+                    csv_writer, update_row(in_row, res["rows"][0])
                 )
                 update_ccn_count(counts, ccn)
                 continue
@@ -104,7 +137,7 @@ def main():
         zipcode = in_row.get("zipcode")
 
         res = db.sql(
-            'SELECT `cms_certification_num` FROM `hospitals` WHERE `address` LIKE "%{}%" AND `state` LIKE "{}" and `zip5` LIKE "{}";'.format(
+            'SELECT * FROM `hospitals` WHERE `address` LIKE "%{}%" AND `state` LIKE "{}" and `zip5` LIKE "{}";'.format(
                 street_addr.replace("-", "").replace(".", ""), state, zipcode
             ),
             result_format="json",
@@ -113,7 +146,7 @@ def main():
         if len(res["rows"]) == 1:
             ccn = res["rows"][0]["cms_certification_num"]
             write_output_row(
-                csv_writer, cdm_url, ccn, web_url
+                csv_writer, update_row(in_row, res["rows"][0])
             )
             update_ccn_count(counts, ccn)
             continue
@@ -121,7 +154,7 @@ def main():
         name = in_row.get("name")
 
         res = db.sql(
-            'SELECT `cms_certification_num` FROM `hospitals` WHERE `name` LIKE "%{}%";'.format(
+            'SELECT * FROM `hospitals` WHERE `name` LIKE "%{}%";'.format(
                 name.strip()
             ),
             result_format="json",
@@ -129,7 +162,7 @@ def main():
         if len(res["rows"]) == 1:
             ccn = res["rows"][0]["cms_certification_num"]
             write_output_row(
-                csv_writer, cdm_url, ccn, web_url
+                csv_writer, update_row(in_row, res["rows"][0])
             )
             update_ccn_count(counts, ccn)
             continue
