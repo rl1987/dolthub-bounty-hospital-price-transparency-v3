@@ -41,7 +41,7 @@ def download_chargemaster(url):
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
 
-    out_f = open("{}.csv".format(cms_id), "w", encoding="utf-8")
+    out_f = open("out_{}.csv".format(cms_id), "w", encoding="utf-8")
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer.writeheader()
 
