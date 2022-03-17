@@ -49,11 +49,75 @@ def process_chargemaster(cms_id, url):
 
     csv_reader = csv.DictReader(in_f)
 
-    #for in_row in csv_reader:
-    #    code = in_row.get("Code").split(' ')[-1]
-    #    internal_revenue_code = in_row.get("Rev Code").split(" - ")[0]
-    #    description = in_row.get("Procedure Description")
-    #    code_disambiguator = in_row.get("Procedure")
+    for in_row in csv_reader:
+        code = in_row.get("Code").split(' ')[-1]
+        internal_revenue_code = in_row.get("Rev Code").split(" - ")[0]
+        description = in_row.get("Procedure Description")
+        code_disambiguator = in_row.get("Procedure")
+        payer = in_row.get("Payer")
+        gross_ip_price = in_row.get("IP_Charge")
+        discounted_ip_price = in_row.get("IP_Selfpay")
+        gross_op_price = in_row.get("OP_Charge")
+        discounted_op_price = in_row.get("OP_Selfpay")
+        
+        out_row = {
+            "cms_certification_num": cms_id,
+            "code": code,
+            "internal_revenue_code": internal_revenue_code,
+            "units": "",
+            "description": description,
+            "code_disambiguator": code_disambiguator
+        }
+
+        if payer == "<Self-pay>":
+            out_row['payer'] = "GROSS CHARGE"
+
+            if gross_ip_price != "":
+                out_row['price'] = gross_ip_price
+                out_row['inpatient_outpatient'] = "INPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
+
+
+            if gross_op_price != "":
+                out_row['price'] = gross_op_price
+                out_row['inpatient_outpatient'] = "OUTPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
+    
+            out_row['payer'] = "CASH PRICE"
+
+            if discounted_ip_price != "":
+                out_row['price'] = discounted_ip_price
+                out_row['inpatient_outpatient'] = "INPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
+
+            if discounted_op_price != "":
+                out_row['price'] = discounted_op_price
+                out_row['inpatient_outpatient'] = "OUTPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
+        else:
+            out_row['payer'] = payer
+
+            if gross_ip_price != "":
+                out_row['price'] = gross_ip_price
+                out_row['inpatient_outpatient'] = "INPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
+
+            if gross_op_price != "":
+                out_row['price'] = gross_op_price
+                out_row['inpatient_outpatient'] = "OUTPATIENT"
+
+                pprint(out_row)
+                csv_writer.writerow(out_row)
 
     in_f.close()
     out_f.close()
