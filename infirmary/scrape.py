@@ -37,7 +37,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
         if in_row[0].value == "Procedure" or str(in_row[0].value).startswith("Update"):
             continue
 
-        code_disambiguator = in_row[0].value
+        code_disambiguator = "NONE"
 
         if len(in_row) == 5:
             code = in_row[1].value
