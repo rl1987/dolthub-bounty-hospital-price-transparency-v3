@@ -56,20 +56,20 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
         in_row_dict = dict(zip(input_fieldnames, values))
         pprint(in_row_dict)
 
-        code_disambiguator = in_row_dict.get("FileRowID")
-        if code_disambiguator is None:
-            code_disambiguator = in_row_dict.get("CDM NUMBER")
-
-        if code_disambiguator is None:
-            code_disambiguator = "NONE"
+        code_disambiguator = "NONE"
 
         description = in_row_dict.get("ChargeDesc")
         if description is None:
             description = in_row_dict.get("CHARGE DESCRIPTION")
 
         code = in_row_dict.get("CPT")
+        modifiers = in_row_dict.get("MODIFIERS")
+
         if code == "" or code is None:
             code = "NONE"
+        else:
+            if modifiers != "" and modifiers is not None:
+                code += str(modifiers)
 
         rev_code = in_row_dict.get("RevCode")
         if rev_code is None:
