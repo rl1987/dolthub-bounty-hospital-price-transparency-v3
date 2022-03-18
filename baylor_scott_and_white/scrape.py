@@ -4,7 +4,6 @@ import csv
 from pprint import pprint
 from io import StringIO
 from pprint import pprint
-import uuid
 
 import requests
 
@@ -66,7 +65,7 @@ def process_chargemaster(cms_id, url):
             rev_code = "NONE"
 
         description = in_row.get("Procedure Name")
-        code_disambiguator = str(uuid.uuid4())
+        code_disambiguator = "NONE"
 
         out_row = {
             "cms_certification_num": cms_id,
