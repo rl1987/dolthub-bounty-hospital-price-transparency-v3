@@ -34,21 +34,23 @@ def process_chargemaster(cms_id, url):
 
     for in_row in csv_reader:
         code = in_row.get("CPT Code").strip()
-        if code == "-":
+        if code == "-" or code == "":
             code = "NONE"
 
         internal_revenue_code = in_row.get("Revenue Code").strip()
+        if internal_revenue_code == "":
+            internal_revenue_code = "NONE"
+
         price = in_row.get("Charge").strip()
 
         if price == "-" or price == "":
             continue
 
-        if code == "" or internal_revenue_code == "" or price == "":
-            continue
-
+        description = in_row.get("Code Description").strip()
         code_disambiguator = in_row.get("CDM Number").strip()
+
         if code_disambiguator == "":
-            code_disambiguator = "NONE"
+            code_disambiguator = description
 
         out_row = {
             "cms_certification_num": cms_id,
@@ -56,7 +58,7 @@ def process_chargemaster(cms_id, url):
             "code": code,
             "internal_revenue_code": internal_revenue_code,
             "units": "",
-            "description": in_row.get("Code Description").strip(),
+            "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
             "price": price,
             "code_disambiguator": code_disambiguator,
