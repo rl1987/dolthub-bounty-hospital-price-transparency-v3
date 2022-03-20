@@ -40,7 +40,7 @@ OVERRIDES = {
     "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/522379881_NW%20Oro%20Valley_standardcharges.csv": "030114",
     "https://www.healthiertucson.com/Uploads/Public/Documents/charge-masters/621762430_NW%20Tucson_standardcharges.csv": "030085",
     "https://www.merithealthwomanshospital.com/Uploads/Public/Documents/charge-masters/640780035_Merit%20Woman's_standardcharges.csv": "250136",
-    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/205896848_NW%20Springdale_standardcharges.csv": "042009",
+    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/205896848_NW%20Springdale_standardcharges.csv": "040022",
     "https://www.braverahealth.com/Uploads/Public/Documents/charge-masters/200195256_Seven%20Rivers_standardcharges.csv": "100249",
     "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/274564798_Scranton_standardcharges.csv": "390237",
     "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/452672023_Moses%20Taylor_standardcharges.csv": "390119",
