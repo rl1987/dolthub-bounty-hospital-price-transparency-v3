@@ -47,6 +47,12 @@ OVERRIDES = {
     "https://www.commonwealthhealth.net/Uploads/Public/Documents/charge-masters/263632648_Wilkes-Barre_standardcharges.csv": "390137",
     "https://www.alliancehealthdurant.com/Uploads/Public/Documents/charge-masters/383862800_Alliance%20Madill_standardcharges.csv": "371326",
     "https://www.merithealthriverregion.com/Uploads/Public/Documents/charge-masters/621752111_Merit%20River%20Region_standardcharges.csv": "250031",
+    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/263635210_Siloam%20Springs_standardcharges.csv": "040001",
+    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/205896848_willow%20Creek_standardcharges.csv": -1,
+    "https://www.northwesthealth.com/Uploads/Public/Documents/charge-masters/205896848_NW%20Bentonville_standardcharges.csv": -1,
+    "https://www.braverahealth.com/Uploads/Public/Documents/charge-masters/650832790_Bayfront%20Spring%20Hill_standardcharges.csv": -1,
+    "https://www.shorepointhealthcharlotte.com/Uploads/Public/Documents/charge-masters/650526360_Punta%20Gorda_standardcharges.csv": "100047",
+    "https://www.shorepointhealthcharlotte.com/Uploads/Public/Documents/charge-masters/650526360_Riverside%20Behavioral_standardcharges.csv": -1,
 }
 
 
@@ -102,6 +108,8 @@ def main():
 
         if OVERRIDES.get(cdm_url) is not None:
             ccn = OVERRIDES.get(cdm_url)
+            if ccn == -1:
+                continue
             res = db.sql('SELECT * FROM `hospitals` WHERE `cms_certification_num` = "{}";'.format(ccn), result_format="json")
             write_output_row(
                 csv_writer, update_row(in_row, res["rows"][0])
