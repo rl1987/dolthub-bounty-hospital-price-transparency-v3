@@ -50,14 +50,11 @@ def process_chargemaster(cms_id, url):
     csv_reader = csv.DictReader(in_f)
 
     for in_row in csv_reader:
+        pprint(in_row)
         code = in_row.get("Code").split(' ')[-1]
         code = code.strip()
-        if code == "" or code == "N/A":
+        if len(code) == 0 or code == "N/A":
             code = "NONE"
-        internal_revenue_code = in_row.get("Rev Code").split(" - ")[0]
-        internal_revenue_code = internal_revenue_code.strip()
-        if internal_revenue_code == "" or internal_revenue_code == "N/A":
-            internal_revenue_code == "NONE"
         description = in_row.get("Procedure Description")
         code_disambiguator = in_row.get("Procedure")
         if code_disambiguator == "":
@@ -67,11 +64,18 @@ def process_chargemaster(cms_id, url):
         discounted_ip_price = in_row.get("IP_Selfpay")
         gross_op_price = in_row.get("OP_Charge")
         discounted_op_price = in_row.get("OP_Selfpay")
-        
+ 
+        rev_code = in_row.get("Rev Code").split(" - ")[0]
+        rev_code = rev_code.strip()
+        if len(rev_code) == 0 or rev_code == "N/A":
+            rev_code = "NONE"
+        assert len(rev_code) > 0
+        assert len(code) > 0
+
         out_row = {
             "cms_certification_num": cms_id,
             "code": code,
-            "internal_revenue_code": internal_revenue_code,
+            "internal_revenue_code": rev_code,
             "units": "",
             "description": description,
             "code_disambiguator": code_disambiguator
