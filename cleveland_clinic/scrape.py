@@ -84,7 +84,7 @@ def process_chargemaster(cms_id, url):
         if payer == "<Self-pay>":
             out_row['payer'] = "GROSS CHARGE"
 
-            if gross_ip_price != "":
+            if gross_ip_price != "" and gross_ip_price != "N/A":
                 out_row['price'] = gross_ip_price
                 out_row['inpatient_outpatient'] = "INPATIENT"
 
@@ -92,7 +92,7 @@ def process_chargemaster(cms_id, url):
                 csv_writer.writerow(out_row)
 
 
-            if gross_op_price != "":
+            if gross_op_price != "" and gross_op_price != "N/A":
                 out_row['price'] = gross_op_price
                 out_row['inpatient_outpatient'] = "OUTPATIENT"
 
@@ -101,14 +101,14 @@ def process_chargemaster(cms_id, url):
     
             out_row['payer'] = "CASH PRICE"
 
-            if discounted_ip_price != "":
+            if discounted_ip_price != "" and discounted_ip_price != "N/A":
                 out_row['price'] = discounted_ip_price
                 out_row['inpatient_outpatient'] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
-            if discounted_op_price != "":
+            if discounted_op_price != "" and discounted_op_price != "N/A":
                 out_row['price'] = discounted_op_price
                 out_row['inpatient_outpatient'] = "OUTPATIENT"
 
@@ -117,14 +117,14 @@ def process_chargemaster(cms_id, url):
         else:
             out_row['payer'] = payer
 
-            if gross_ip_price != "":
+            if gross_ip_price != "" and gross_ip_price != "N/A":
                 out_row['price'] = gross_ip_price
                 out_row['inpatient_outpatient'] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
-            if gross_op_price != "":
+            if gross_op_price != "" and gross_op_price != "N/A":
                 out_row['price'] = gross_op_price
                 out_row['inpatient_outpatient'] = "OUTPATIENT"
 
