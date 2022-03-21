@@ -16,7 +16,7 @@ def main():
         print("{} <dolt_db_dir>".format(sys.argv[0]))
         return
 
-    out_f = open("ccns.cvs", "w", encoding="utf-8")
+    out_f = open("ccns.csv", "w", encoding="utf-8")
 
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer.writeheader()
