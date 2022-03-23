@@ -51,7 +51,7 @@ def process_chargemaster(cms_id, url):
         pprint(in_row)
 
         code = in_row.get("ProcedureCode")
-        if code == "N/A":
+        if code == "N/A" or code == "" or code is None:
             code = "NONE"
 
         modifier = in_row.get("Modifier")
@@ -59,7 +59,7 @@ def process_chargemaster(cms_id, url):
             code += "-" + modifier
 
         rev_code = in_row.get("RevenueCode")
-        if rev_code == "N/A":
+        if rev_code == "N/A" or rev_code is None or rev_code == "":
             rev_code = "NONE"
 
         description = in_row.get("Description")
