@@ -78,7 +78,7 @@ def process_chargemaster(cms_id, url):
 
         for payer in payers:
             price = in_row.get(payer)
-            if price == "N/A":
+            if price == "N/A" or price == "":
                 continue
 
             inpatient_outpatient = "UNSPECIFIED"
