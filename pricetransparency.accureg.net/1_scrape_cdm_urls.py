@@ -6,7 +6,7 @@ from pprint import pprint
 from lxml import html
 import requests
 
-FIELDNAMES = [ "url", "name", "cdm_url" ]
+FIELDNAMES = [ "url", "name", "cdm_url", 'homepage_url' ]
 
 def main():
     in_f = open("moz-inbound-links-for-pricetransparency_accureg_net-2022-03-22_10_25_32_905974Z.csv", "r")
@@ -38,6 +38,8 @@ def main():
 
         tree = html.fromstring(resp.text)
 
+        homepage_url = row[0]
+
         for dl_row in tree.xpath('//div[@class="ptdownloadrow"]'):
             name = dl_row.xpath('.//div[@class="ptdownloadrowfacilityname"]/text()')
             if len(name) == 0:
@@ -56,6 +58,7 @@ def main():
                 'url': url,
                 'name': name,
                 'cdm_url': cdm_url,
+                'homepage_url': homepage_url
             }
 
             pprint(row)
