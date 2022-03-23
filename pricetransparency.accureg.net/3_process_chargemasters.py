@@ -55,7 +55,7 @@ def process_chargemaster(cms_id, url):
             code = "NONE"
 
         modifier = in_row.get("Modifier")
-        if modifier != "N/A":
+        if modifier != "N/A" and modifier != "":
             code += "-" + modifier
 
         rev_code = in_row.get("RevenueCode")
@@ -78,7 +78,7 @@ def process_chargemaster(cms_id, url):
 
         for payer in payers:
             price = in_row.get(payer)
-            if price == "N/A" or price == "":
+            if price == "N/A" or price == "" or price is None:
                 continue
 
             inpatient_outpatient = "UNSPECIFIED"
