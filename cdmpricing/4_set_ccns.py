@@ -18,6 +18,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def main():
     cdm_id_to_ccn = dict()
 
@@ -35,7 +36,9 @@ def main():
 
     cdm_id_to_site = dict()
 
-    in_f = open("moz-inbound-links-for-cdmpricing_com-2022-03-21_09_06_07_330067Z.csv", "r")
+    in_f = open(
+        "moz-inbound-links-for-cdmpricing_com-2022-03-21_09_06_07_330067Z.csv", "r"
+    )
     csv_reader = csv.reader(in_f)
 
     for row in csv_reader:
@@ -47,7 +50,7 @@ def main():
             continue
 
         print(cdm_url)
-        cdm_id = cdm_url.split('/')[1]
+        cdm_id = cdm_url.split("/")[1]
 
         web_url = row[0]
         web_url = "https://" + web_url.split("/")[0]
@@ -90,22 +93,26 @@ def main():
 
             out_row = dict(in_row)
 
-            del out_row['cdm_id']
-            del out_row['hospital_name']
+            del out_row["cdm_id"]
+            del out_row["hospital_name"]
 
-            out_row['cms_certification_num'] = ccn
+            out_row["cms_certification_num"] = ccn
 
             csv_writer.writerow(out_row)
 
         if not not_found:
             out_f.close()
-    
+
             if cdm_id is not None and ccn is not None:
                 web_url = cdm_id_to_site.get(cdm_id)
-                h_f.write('UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "https://www.cdmpricing.com/{}/standard-charges", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(web_url, cdm_id, ccn))
+                h_f.write(
+                    'UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "https://www.cdmpricing.com/{}/standard-charges", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                        web_url, cdm_id, ccn
+                    )
+                )
 
     h_f.close()
 
+
 if __name__ == "__main__":
     main()
-

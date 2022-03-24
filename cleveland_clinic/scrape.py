@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -28,15 +29,16 @@ def download_chargemaster(url):
         return filename
 
     print("Downloading: {} -> {}".format(url, filename))
-    
+
     # Based on: https://stackoverflow.com/a/16696317
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
-        with open(filename, 'wb') as f:
+        with open(filename, "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
 
     return filename
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -51,7 +53,7 @@ def process_chargemaster(cms_id, url):
 
     for in_row in csv_reader:
         pprint(in_row)
-        code = in_row.get("Code").split(' ')[-1]
+        code = in_row.get("Code").split(" ")[-1]
         code = code.strip()
         if len(code) == 0 or code == "N/A":
             code = "NONE"
@@ -64,7 +66,7 @@ def process_chargemaster(cms_id, url):
         discounted_ip_price = in_row.get("IP_Selfpay")
         gross_op_price = in_row.get("OP_Charge")
         discounted_op_price = in_row.get("OP_Selfpay")
- 
+
         rev_code = in_row.get("Rev Code").split(" - ")[0]
         rev_code = rev_code.strip()
         if len(rev_code) == 0 or rev_code == "N/A":
@@ -78,55 +80,54 @@ def process_chargemaster(cms_id, url):
             "internal_revenue_code": rev_code,
             "units": "",
             "description": description,
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         if payer == "<Self-pay>":
-            out_row['payer'] = "GROSS CHARGE"
+            out_row["payer"] = "GROSS CHARGE"
 
             if gross_ip_price != "" and gross_ip_price != "N/A":
-                out_row['price'] = gross_ip_price
-                out_row['inpatient_outpatient'] = "INPATIENT"
+                out_row["price"] = gross_ip_price
+                out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
-
 
             if gross_op_price != "" and gross_op_price != "N/A":
-                out_row['price'] = gross_op_price
-                out_row['inpatient_outpatient'] = "OUTPATIENT"
+                out_row["price"] = gross_op_price
+                out_row["inpatient_outpatient"] = "OUTPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
-    
-            out_row['payer'] = "CASH PRICE"
+
+            out_row["payer"] = "CASH PRICE"
 
             if discounted_ip_price != "" and discounted_ip_price != "N/A":
-                out_row['price'] = discounted_ip_price
-                out_row['inpatient_outpatient'] = "INPATIENT"
+                out_row["price"] = discounted_ip_price
+                out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
             if discounted_op_price != "" and discounted_op_price != "N/A":
-                out_row['price'] = discounted_op_price
-                out_row['inpatient_outpatient'] = "OUTPATIENT"
+                out_row["price"] = discounted_op_price
+                out_row["inpatient_outpatient"] = "OUTPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
         else:
-            out_row['payer'] = payer
+            out_row["payer"] = payer
 
             if gross_ip_price != "" and gross_ip_price != "N/A":
-                out_row['price'] = gross_ip_price
-                out_row['inpatient_outpatient'] = "INPATIENT"
+                out_row["price"] = gross_ip_price
+                out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
             if gross_op_price != "" and gross_op_price != "N/A":
-                out_row['price'] = gross_op_price
-                out_row['inpatient_outpatient'] = "OUTPATIENT"
+                out_row["price"] = gross_op_price
+                out_row["inpatient_outpatient"] = "OUTPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
@@ -134,9 +135,10 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
-        "360180":"https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714585_cleveland-clinic-main-campus_standardcharges.csv",
+        "360180": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714585_cleveland-clinic-main-campus_standardcharges.csv",
         "363038": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/474442902_avon-hospital_standardcharges.csv",
         "100289": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/650844880_cleveland-clinic-florida-weston-hospital_standardcharges.csv",
         "363304": "https://my.clevelandclinic.org/-/scassets/files/org/patients-visitors/hospital-standard-charge-files/340714570_cleveland-clinic-childrens-hospital-for-rehabilitation_standardcharges.csv",

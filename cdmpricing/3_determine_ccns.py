@@ -7,7 +7,7 @@ import sys
 
 import doltcli as dolt
 
-FIELDNAMES = [ "cdm_id", "name", "ccn", "db_name" ]
+FIELDNAMES = ["cdm_id", "name", "ccn", "db_name"]
 
 OVERRIDES = {
     "80a6ed58c67c09453664811584bad805": "140054",
@@ -25,8 +25,9 @@ OVERRIDES = {
     "2cdebd3b64c0882116cd2a1345337713": "100181",
     "2681662fb48ed3ef7b21f25c934ad1b4": "450253",
     "5a694066d76b01081f2dc12cb7d912a9": "330180",
-    "66fc13e48cb7f95b6744c2455e5f13af": "220108"
+    "66fc13e48cb7f95b6744c2455e5f13af": "220108",
 }
+
 
 def main():
     if len(sys.argv) == 2:
@@ -56,12 +57,16 @@ def main():
             in_f.close()
             continue
         in_f.close()
-    
+
         cdm_id = first_row.get("cdm_id")
         name = first_row.get("hospital_name")
 
-        res = db.sql('SELECT * FROM `hospitals` WHERE `name` LIKE "%{}%" AND `last_edited_by_username` IS NULL;'.format(name),
-                result_format="json")
+        res = db.sql(
+            'SELECT * FROM `hospitals` WHERE `name` LIKE "%{}%" AND `last_edited_by_username` IS NULL;'.format(
+                name
+            ),
+            result_format="json",
+        )
         pprint(res)
 
         ccn = OVERRIDES.get(cdm_id)
@@ -73,12 +78,7 @@ def main():
             else:
                 db_name = ""
 
-            out_row = {
-                "cdm_id": cdm_id,
-                "name": name,
-                "ccn": ccn,
-                "db_name": db_name
-            }
+            out_row = {"cdm_id": cdm_id, "name": name, "ccn": ccn, "db_name": db_name}
 
             pprint(out_row)
             csv_writer.writerow(out_row)
@@ -97,6 +97,6 @@ def main():
     print("Not found:")
     pprint(not_found)
 
+
 if __name__ == "__main__":
     main()
-

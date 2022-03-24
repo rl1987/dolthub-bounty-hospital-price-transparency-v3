@@ -4,6 +4,7 @@ import csv
 import sys
 from urllib.parse import urlparse
 
+
 def main():
     in_f = open(sys.argv[1], "r")
 
@@ -20,7 +21,7 @@ def main():
             continue
 
         print(cdm_url)
-        cdm_id = cdm_url.split('/')[1]
+        cdm_id = cdm_url.split("/")[1]
 
         if cdm_id != "":
             cdm_ids.add(cdm_id)
@@ -34,6 +35,6 @@ def main():
 
     out_f.close()
 
+
 if __name__ == "__main__":
     main()
-

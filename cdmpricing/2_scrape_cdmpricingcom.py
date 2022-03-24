@@ -1,4 +1,4 @@
-#!/usr/bin/python3 
+#!/usr/bin/python3
 
 import csv
 from pprint import pprint
@@ -6,7 +6,7 @@ from pprint import pprint
 import requests
 
 FIELDNAMES = [
-    #"cms_certification_num",
+    # "cms_certification_num",
     "cdm_id",
     "hospital_name",
     "payer",
@@ -19,14 +19,19 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def scrape_cdm(cdm_id):
     out_f = open(cdm_id + ".csv", "w", encoding="utf-8")
     csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer.writeheader()
 
-    resp0 = requests.get("https://apim.services.craneware.com/api-pricing-transparency/api/public/{}/metadata/name".format(cdm_id))
+    resp0 = requests.get(
+        "https://apim.services.craneware.com/api-pricing-transparency/api/public/{}/metadata/name".format(
+            cdm_id
+        )
+    )
     print(resp0.url)
-    
+
     hospital_name = resp0.json().get("name").strip()
 
     page = 0
@@ -34,17 +39,22 @@ def scrape_cdm(cdm_id):
 
     while True:
         params = {
-            'page': page,
-            'limit': limit,
-            'search': '',
-            'codeType': '',
+            "page": page,
+            "limit": limit,
+            "search": "",
+            "codeType": "",
         }
 
-        resp = requests.get("https://apim.services.craneware.com/api-pricing-transparency/api/public/{}/charges/standardCharges".format(cdm_id), params=params)
+        resp = requests.get(
+            "https://apim.services.craneware.com/api-pricing-transparency/api/public/{}/charges/standardCharges".format(
+                cdm_id
+            ),
+            params=params,
+        )
         print(resp.url)
 
         items = resp.json().get("response")
-        
+
         for item_dict in items:
             if item_dict.get("cranewareShoppable") != "":
                 inpatient_outpatient = "OUTPATIENT"
@@ -64,15 +74,15 @@ def scrape_cdm(cdm_id):
 
             gross = item_dict.get("grossCharge")
             if gross != "" and gross != "-":
-                row['payer'] = "GROSS CHARGE"
-                row['price'] = gross
+                row["payer"] = "GROSS CHARGE"
+                row["price"] = gross
                 pprint(row)
                 csv_writer.writerow(row)
 
             discounted = item_dict.get("selfPay")
             if discounted != "" and discounted != "-":
-                row['payer'] = "CASH PRICE"
-                row['price'] = discounted
+                row["payer"] = "CASH PRICE"
+                row["price"] = discounted
                 pprint(row)
                 csv_writer.writerow(row)
 
@@ -83,8 +93,8 @@ def scrape_cdm(cdm_id):
 
                 payer = payer_dict.get("name")
 
-                row['payer'] = payer
-                row['price'] = price
+                row["payer"] = payer
+                row["price"] = price
                 pprint(row)
                 csv_writer.writerow(row)
 
@@ -92,8 +102,9 @@ def scrape_cdm(cdm_id):
             break
 
         page += 1
-        
+
     out_f.close()
+
 
 def main():
     in_f = open("cdm_ids.txt", "r")
@@ -103,6 +114,6 @@ def main():
 
     in_f.close()
 
+
 if __name__ == "__main__":
     main()
-

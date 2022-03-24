@@ -59,26 +59,29 @@ OVERRIDES = {
 def update_row(old_row, db_row):
     updated_row = dict(old_row)
 
-    updated_row['ccn'] = db_row['cms_certification_num']
-    updated_row['db_name'] = db_row['name']
-    updated_row['db_street_addr'] = db_row['address']
-    updated_row['db_city'] = db_row['city']
-    updated_row['db_state'] = db_row['state']
-    updated_row['db_zipcode'] = db_row['zip5']
-    updated_row['db_phone'] = db_row['phone_number']
-    updated_row['db_bed_count'] = db_row['beds']
+    updated_row["ccn"] = db_row["cms_certification_num"]
+    updated_row["db_name"] = db_row["name"]
+    updated_row["db_street_addr"] = db_row["address"]
+    updated_row["db_city"] = db_row["city"]
+    updated_row["db_state"] = db_row["state"]
+    updated_row["db_zipcode"] = db_row["zip5"]
+    updated_row["db_phone"] = db_row["phone_number"]
+    updated_row["db_bed_count"] = db_row["beds"]
 
     return updated_row
+
 
 def write_output_row(csv_writer, row):
     pprint(row)
     csv_writer.writerow(row)
+
 
 def update_ccn_count(counts, ccn):
     if counts.get(ccn) is None:
         counts[ccn] = 1
     else:
         counts[ccn] += 1
+
 
 def main():
     in_f = open("cdm_urls.csv", "r")
@@ -110,10 +113,13 @@ def main():
             ccn = OVERRIDES.get(cdm_url)
             if ccn == -1:
                 continue
-            res = db.sql('SELECT * FROM `hospitals` WHERE `cms_certification_num` = "{}";'.format(ccn), result_format="json")
-            write_output_row(
-                csv_writer, update_row(in_row, res["rows"][0])
+            res = db.sql(
+                'SELECT * FROM `hospitals` WHERE `cms_certification_num` = "{}";'.format(
+                    ccn
+                ),
+                result_format="json",
             )
+            write_output_row(csv_writer, update_row(in_row, res["rows"][0]))
             update_ccn_count(counts, ccn)
             continue
 
@@ -135,9 +141,7 @@ def main():
 
             if len(res["rows"]) == 1:
                 ccn = res["rows"][0]["cms_certification_num"]
-                write_output_row(
-                    csv_writer, update_row(in_row, res["rows"][0])
-                )
+                write_output_row(csv_writer, update_row(in_row, res["rows"][0]))
                 update_ccn_count(counts, ccn)
                 continue
 
@@ -154,25 +158,19 @@ def main():
 
         if len(res["rows"]) == 1:
             ccn = res["rows"][0]["cms_certification_num"]
-            write_output_row(
-                csv_writer, update_row(in_row, res["rows"][0])
-            )
+            write_output_row(csv_writer, update_row(in_row, res["rows"][0]))
             update_ccn_count(counts, ccn)
             continue
 
         name = in_row.get("name")
 
         res = db.sql(
-            'SELECT * FROM `hospitals` WHERE `name` LIKE "%{}%";'.format(
-                name.strip()
-            ),
+            'SELECT * FROM `hospitals` WHERE `name` LIKE "%{}%";'.format(name.strip()),
             result_format="json",
         )
         if len(res["rows"]) == 1:
             ccn = res["rows"][0]["cms_certification_num"]
-            write_output_row(
-                csv_writer, update_row(in_row, res["rows"][0])
-            )
+            write_output_row(csv_writer, update_row(in_row, res["rows"][0]))
             update_ccn_count(counts, ccn)
             continue
 
@@ -186,6 +184,7 @@ def main():
     for ccn in counts.keys():
         if counts[ccn] > 1:
             print(ccn, counts[ccn])
+
 
 if __name__ == "__main__":
     main()

@@ -18,6 +18,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -26,15 +27,16 @@ def download_chargemaster(url):
         return filename
 
     print("Downloading: {} -> {}".format(url, filename))
-    
+
     # Based on: https://stackoverflow.com/a/16696317
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
-        with open(filename, 'wb') as f:
+        with open(filename, "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
 
     return filename
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -70,7 +72,7 @@ def process_chargemaster(cms_id, url):
             "internal_revenue_code": rev_code,
             "units": "",
             "description": description,
-            "code_disambiguator": "NONE"
+            "code_disambiguator": "NONE",
         }
 
         payers = list(in_row.keys())[8:]
@@ -108,9 +110,9 @@ def process_chargemaster(cms_id, url):
             else:
                 continue
 
-            out_row['price'] = price
-            out_row['payer'] = payer
-            out_row['inpatient_outpatient'] = inpatient_outpatient
+            out_row["price"] = price
+            out_row["payer"] = payer
+            out_row["inpatient_outpatient"] = inpatient_outpatient
 
             pprint(out_row)
             csv_writer.writerow(out_row)
@@ -118,12 +120,13 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     in_f = open("todo2.csv", "r")
     csv_reader = csv.DictReader(in_f)
 
-    h_f = open('hospitals.sql', 'w')
-        
+    h_f = open("hospitals.sql", "w")
+
     for row in csv_reader:
         process_chargemaster(row.get("ccn"), row.get("cdm_url"))
         h_f.write(
@@ -134,6 +137,6 @@ def main():
 
     in_f.close()
 
+
 if __name__ == "__main__":
     main()
-

@@ -21,10 +21,14 @@ FIELDNAMES = [
 
 
 def set_code_disambiguator(csv_file_path):
-    print("###############################################################################")
+    print(
+        "###############################################################################"
+    )
     print(csv_file_path)
-    print("###############################################################################")
-        
+    print(
+        "###############################################################################"
+    )
+
     uuid_dict = dict()
     code_counts = dict()
     comb_counts = dict()
@@ -36,22 +40,29 @@ def set_code_disambiguator(csv_file_path):
     out1_f = open(tmp_path1, "w", encoding="utf-8")
 
     csv_reader1 = csv.DictReader(in1_f)
-    csv_writer1 = csv.DictWriter(out1_f, fieldnames=FIELDNAMES, lineterminator='\n')
+    csv_writer1 = csv.DictWriter(out1_f, fieldnames=FIELDNAMES, lineterminator="\n")
     csv_writer1.writeheader()
 
     for in_row in csv_reader1:
-        #code_disambiguator = in_row.get('code_disambiguator')
-        #if code_disambiguator != "" and code_disambiguator != "NONE":
+        # code_disambiguator = in_row.get('code_disambiguator')
+        # if code_disambiguator != "" and code_disambiguator != "NONE":
         #    continue
 
-        cms_certification_num = in_row.get('cms_certification_num')
-        payer = in_row.get('payer')
-        code = in_row.get('code')
-        internal_revenue_code = in_row.get('internal_revenue_code')
-        inpatient_outpatient = in_row.get('inpatient_outpatient')
+        cms_certification_num = in_row.get("cms_certification_num")
+        payer = in_row.get("payer")
+        code = in_row.get("code")
+        internal_revenue_code = in_row.get("internal_revenue_code")
+        inpatient_outpatient = in_row.get("inpatient_outpatient")
         price = in_row.get("price")
-    
-        k = (cms_certification_num, payer, code, internal_revenue_code, inpatient_outpatient, price)
+
+        k = (
+            cms_certification_num,
+            payer,
+            code,
+            internal_revenue_code,
+            inpatient_outpatient,
+            price,
+        )
 
         if uuid_dict.get(k) is not None:
             continue
@@ -64,8 +75,14 @@ def set_code_disambiguator(csv_file_path):
         else:
             code_counts[code] += 1
 
-        comb = (cms_certification_num, payer, code, internal_revenue_code, inpatient_outpatient)
-        
+        comb = (
+            cms_certification_num,
+            payer,
+            code,
+            internal_revenue_code,
+            inpatient_outpatient,
+        )
+
         if comb_counts.get(comb) is None:
             comb_counts[comb] = 1
         else:
@@ -73,8 +90,8 @@ def set_code_disambiguator(csv_file_path):
 
         out_row = dict(in_row)
 
-        out_row['code_disambiguator'] = v
-        
+        out_row["code_disambiguator"] = v
+
         csv_writer1.writerow(out_row)
 
     pprint(uuid_dict)
@@ -83,7 +100,7 @@ def set_code_disambiguator(csv_file_path):
 
     in1_f.close()
     out1_f.close()
- 
+
     codes = list(code_counts.keys())
     for c in codes:
         if code_counts[c] == 1:
@@ -105,7 +122,7 @@ def set_code_disambiguator(csv_file_path):
         n = code_counts.get(code)
         if n is None:
             continue
-        
+
         uuid_to_idx[u] = n
         code_counts[code] -= 1
 
@@ -114,24 +131,30 @@ def set_code_disambiguator(csv_file_path):
     for in_row in csv_reader2:
         out_row = dict(in_row)
 
-        code_disambiguator = in_row.get('code_disambiguator')
+        code_disambiguator = in_row.get("code_disambiguator")
 
-        cms_certification_num = in_row.get('cms_certification_num')
-        payer = in_row.get('payer')
-        code = in_row.get('code')
-        internal_revenue_code = in_row.get('internal_revenue_code')
-        inpatient_outpatient = in_row.get('inpatient_outpatient')
-        
-        comb = (cms_certification_num, payer, code, internal_revenue_code, inpatient_outpatient)
-        
+        cms_certification_num = in_row.get("cms_certification_num")
+        payer = in_row.get("payer")
+        code = in_row.get("code")
+        internal_revenue_code = in_row.get("internal_revenue_code")
+        inpatient_outpatient = in_row.get("inpatient_outpatient")
+
+        comb = (
+            cms_certification_num,
+            payer,
+            code,
+            internal_revenue_code,
+            inpatient_outpatient,
+        )
+
         if comb_counts.get(comb) == 1:
-            out_row['code_disambiguator'] = "NONE"
+            out_row["code_disambiguator"] = "NONE"
         else:
             idx = uuid_to_idx.get(code_disambiguator)
             if idx is not None:
-                out_row['code_disambiguator'] = idx
+                out_row["code_disambiguator"] = idx
             else:
-                out_row['code_disambiguator'] = "NONE"
+                out_row["code_disambiguator"] = "NONE"
 
         csv_writer2.writerow(out_row)
 
@@ -141,6 +164,7 @@ def set_code_disambiguator(csv_file_path):
     shutil.move(tmp_path2, csv_file_path)
     os.unlink(tmp_path1)
 
+
 def main():
     if len(sys.argv) == 1:
         print("{} <csv_file...>".format(sys.argv[0]))
@@ -148,6 +172,7 @@ def main():
 
     for csv_file_path in sys.argv[1:]:
         set_code_disambiguator(csv_file_path)
+
 
 if __name__ == "__main__":
     main()

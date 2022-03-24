@@ -19,6 +19,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def fix_price(price_str):
     price_str = price_str.replace("$", "").replace(",", "").strip()
 
@@ -26,6 +27,7 @@ def fix_price(price_str):
         price_str = price_str.split(".")[0] + "." + price_str.split(".")[-1][:2]
 
     return price_str
+
 
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)

@@ -18,6 +18,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def fix_price(price_str):
     price_str = price_str.replace("$", "").replace(",", "").strip()
 
@@ -25,6 +26,7 @@ def fix_price(price_str):
         price_str = price_str.split(".")[0] + "." + price_str.split(".")[-1][:2]
 
     return price_str
+
 
 def process_chargemaster(cms_certification_num, url):
     resp = requests.get(url)
@@ -104,7 +106,7 @@ def main():
         "150057": "https://media.franciscanhealth.org/-/patient-resources/standard-charges/350913537_franciscan-health-mooresville_standardcharges.csv?rev=20ca760e514f4b35b55c7f4d5302f2d0",
         "150165": "https://media.franciscanhealth.org/-/patient-resources/standard-charges/352472136_franciscan-health-munster_standardcharges.csv?rev=17afc79b1b2c431380ef6e5aec6c9096",
         "140172": "https://media.franciscanhealth.org/-/patient-resources/standard-charges/362167869_franciscan-health-olympia-fields_standardcharges.csv?rev=1b516e0d3a7241538ae5d4ce6639d322",
-        "151324": "https://media.franciscanhealth.org/-/patient-resources/standard-charges/473825106_franciscan-health-rensselaer_standardcharges.csv?rev=e2b490e6539c4342a2f96e30f201cbd5"
+        "151324": "https://media.franciscanhealth.org/-/patient-resources/standard-charges/473825106_franciscan-health-rensselaer_standardcharges.csv?rev=e2b490e6539c4342a2f96e30f201cbd5",
     }
 
     h_f = open("hospitals.sql", "w")
