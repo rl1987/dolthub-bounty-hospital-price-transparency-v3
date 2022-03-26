@@ -12,11 +12,12 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_droplet" "server" {
-  image    = "debian-11-x64"
-  name     = "dhdb"
-  region   = "sfo3"
-  size     = "s-8vcpu-16gb"
-  ssh_keys = ["50:ba:8f:a6:1a:e5:82:f8:57:5b:a0:c5:6e:00:f6:99"]
+  image     = "debian-11-x64"
+  name      = "dhdb"
+  region    = "sfo3"
+  size      = "s-8vcpu-16gb"
+  ssh_keys  = ["50:ba:8f:a6:1a:e5:82:f8:57:5b:a0:c5:6e:00:f6:99"]
+  user_data = file("provision.sh")
 
   connection {
     host        = self.ipv4_address
@@ -26,20 +27,9 @@ resource "digitalocean_droplet" "server" {
     private_key = file("~/.ssh/id_rsa")
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "apt-get update",
-      "apt-get install -y python3 python3-pip tmux git vim",
-      "curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh > /tmp/install.sh && bash /tmp/install.sh",
-      "dolt config --global --add user.email rimantas@keyspace.lt",
-      "dolt config --global --add user.name \"rl1987\"",
-      "pip3 install openpyxl requests lxml js2xml doltpy",
-    ]
-  }
-
   provisioner "file" {
     source      = "~/.dolt"
-    destination = "/root/.dolt"
+    destination = "/root"
   }
 }
 
