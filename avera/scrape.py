@@ -94,8 +94,6 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
             price = fix_price(price)
 
-            payer = payer.replace("Negotiated Rate", "").strip()
-
             if payer == "Gross Charge":
                 payer = "GROSS CHARGES"
             elif payer == "Discounted Cash Price":
@@ -104,6 +102,8 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
                 payer = "MIN"
             elif payer == "Maximum Negotiated Rate":
                 payer = "MAX"
+
+            payer = payer.replace("Negotiated Rate", "").strip()
 
             out_row["payer"] = payer
             out_row["price"] = price
