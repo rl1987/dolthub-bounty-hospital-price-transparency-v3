@@ -88,7 +88,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         for payer in payers:
             price = in_row_dict.get(payer)
-            if price == "" or price is None or "%" in price or price == "Need Rates" or price == "Case Rate":
+            if price == "" or price is None or "%" in price or price == "Need Rates" or price == "Case Rate" or price == "Exclusion":
                 continue
 
             price = str(price)
