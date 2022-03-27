@@ -100,7 +100,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             inpatient_outpatient = "UNSPECIFIED"
 
             if payer == "GrossCharges":
-                payer = "GROSS CHARGES"
+                payer = "GROSS CHARGE"
             elif payer == "Self Pay Price" or payer == "SELF PAY CASH PRICE":
                 payer = "CASH PRICE"
             elif payer == "MIN NEGOTIATED RATE":
