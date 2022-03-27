@@ -56,35 +56,35 @@ def process_chargemaster(cms_certification_num, url):
         }
 
         gross = in_row.get("Charge")
-        if gross != "" and gross != "-":
+        if gross != "" and not "-" in gross:
             out_row['payer'] = "GROSS CHARGE"
             out_row['price'] = gross.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         discounted = in_row.get("Cash Discount Expected Reimbursement")
-        if discounted != "" and discounted != "-":
+        if discounted != "" and not "-" in discounted:
             out_row['payer'] = "CASH PRICE"
             out_row['price'] = discounted.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         min_price = in_row.get("All Plans Minimum Expected Reimbursement")
-        if min_price != "" and min_price != "-":
+        if min_price != "" and not "-" in min_price:
             out_row['payer'] = "MIN"
             out_row['price'] = min_price.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         max_price = in_row.get("All Plans Maximum Expected Reimbursement")
-        if min_price != "" and min_price != "-":
+        if min_price != "" and not "-" in min_price:
             out_row['payer'] = "MAX"
             out_row['price'] = max_price.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         plan_price = in_row.get("Plan Expected Reimbursement")
-        if plan_price != "" and plan_price != "-":
+        if plan_price != "" and not "-" in plan_price:
             for payer in payers:
                 out_row['payer'] = payer
                 out_row['price'] = plan_price.strip().replace(",", "")
