@@ -56,14 +56,14 @@ def process_chargemaster(cms_certification_num, url):
         }
 
         gross = in_row.get("Charge")
-        if gross != "" and not "-" in gross:
+        if gross != "" and not "-" in gross and gross != "#N/A":
             out_row['payer'] = "GROSS CHARGE"
             out_row['price'] = gross.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         discounted = in_row.get("Cash Discount Expected Reimbursement")
-        if discounted != "" and not "-" in discounted:
+        if discounted != "" and not "-" in discounted and discounted != "#N/A":
             out_row['payer'] = "CASH PRICE"
             out_row['price'] = discounted.strip().replace(",", "")
             pprint(out_row)
