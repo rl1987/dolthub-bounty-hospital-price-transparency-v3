@@ -39,7 +39,7 @@ def download_chargemaster(url):
     return filename
 
 def isnumber(s):
-    return s.replace(".").isdigit()
+    return s.replace(".", "").isdigit()
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
