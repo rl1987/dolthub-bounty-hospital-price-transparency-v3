@@ -20,7 +20,6 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
-
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -39,6 +38,8 @@ def download_chargemaster(url):
 
     return filename
 
+def isnumber(s):
+    return s.replace(".").isdigit()
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -86,14 +87,14 @@ def process_chargemaster(cms_id, url):
         if payer == "<Self-pay>":
             out_row["payer"] = "GROSS CHARGE"
 
-            if gross_ip_price != "" and gross_ip_price != "N/A":
+            if isnumber(gross_ip_price):
                 out_row["price"] = gross_ip_price
                 out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
-            if gross_op_price != "" and gross_op_price != "N/A":
+            if isnumber(gross_op_price):
                 out_row["price"] = gross_op_price
                 out_row["inpatient_outpatient"] = "OUTPATIENT"
 
@@ -102,14 +103,14 @@ def process_chargemaster(cms_id, url):
 
             out_row["payer"] = "CASH PRICE"
 
-            if discounted_ip_price != "" and discounted_ip_price != "N/A":
+            if isnumber(discounted_ip_price):
                 out_row["price"] = discounted_ip_price
                 out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
-            if discounted_op_price != "" and discounted_op_price != "N/A":
+            if isnumber(discounted_op_price):
                 out_row["price"] = discounted_op_price
                 out_row["inpatient_outpatient"] = "OUTPATIENT"
 
@@ -118,14 +119,14 @@ def process_chargemaster(cms_id, url):
         else:
             out_row["payer"] = payer
 
-            if gross_ip_price != "" and gross_ip_price != "N/A":
+            if isnumber(gross_ip_price):
                 out_row["price"] = gross_ip_price
                 out_row["inpatient_outpatient"] = "INPATIENT"
 
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
-            if gross_op_price != "" and gross_op_price != "N/A":
+            if isnumber(gross_op_price):
                 out_row["price"] = gross_op_price
                 out_row["inpatient_outpatient"] = "OUTPATIENT"
 
