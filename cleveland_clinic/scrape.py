@@ -39,14 +39,10 @@ def download_chargemaster(url):
     return filename
 
 def isnumber(s):
-    return s.replace(".").isdigit()
+    return s.replace(".", "").isdigit()
 
-def process_chargemaster(cms_id, url):
+def process_chargemaster(cms_id, url, csv_writer):
     filename = download_chargemaster(url)
-
-    out_f = open("out_{}.csv".format(cms_id), "w", encoding="utf-8")
-    csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
-    csv_writer.writeheader()
 
     in_f = open(filename, "r", encoding="cp1252")
 
@@ -134,7 +130,6 @@ def process_chargemaster(cms_id, url):
                 csv_writer.writerow(out_row)
 
     in_f.close()
-    out_f.close()
 
 
 def main():
@@ -155,9 +150,13 @@ def main():
 
     h_f = open("hospitals.sql", "w")
 
+    out_f = open("cleveland.csv", "w", encoding="utf-8")
+    csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES, lineterminator="\n")
+    csv_writer.writeheader()
+
     for cms_id in targets.keys():
         url = targets[cms_id]
-        process_chargemaster(cms_id, url)
+        process_chargemaster(cms_id, url, csv_writer)
 
         h_f.write(
             'UPDATE `hospitals` SET `homepage_url` = "https://my.clevelandclinic.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
@@ -166,6 +165,7 @@ def main():
         )
 
     h_f.close()
+    out_f.close()
 
 
 if __name__ == "__main__":
