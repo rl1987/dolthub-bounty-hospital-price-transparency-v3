@@ -43,6 +43,12 @@ def process_chargemaster(cms_id, url):
         gross = in_row.get(" Gross Charge ").replace("$", "").replace(",", "").strip()
         discounted = in_row.get(" Discounted Cash Price ").replace("$", "").replace(",", "").strip()
 
+        if code == "":
+            code = "NONE"
+
+        if rev_code == "":
+            rev_code = "NONE"
+
         if quantity == "N/A":
             quantity = ""
 
@@ -72,6 +78,9 @@ def process_chargemaster(cms_id, url):
         for payer in payers:
             price = in_row.get(payer)
             price = price.replace("$", "").replace(",", "").strip()
+
+            if "/" in price:
+                continue
 
             if payer == "De-identified Minimum Third-Party Payer Charges":
                 payer = "MIN"
