@@ -66,7 +66,8 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         for payer in payers:
             price = in_row_dict.get(payer)
-            if price == "N/A" or price == "Inpt Medicare Pricing":
+            price = str(price)
+            if not price.replace(".", "").isdigit():
                 continue
 
             price = str(price)
