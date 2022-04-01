@@ -71,7 +71,7 @@ def main():
             discounted = entry.get("discounted_cash_price")
             if discounted is not None:
                 out_row["payer"] = "CASH PRICE"
-                out_row["price"] = discounted.replace("$", "").replace(", ","").strip()
+                out_row["price"] = discounted.replace("$", "").replace(",","").strip()
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
