@@ -62,28 +62,28 @@ def main():
             }
 
             gross = entry.get("gross_charge")
-            if gross is not None:
+            if gross is not None and not "-" in gross:
                 out_row["payer"] = "GROSS CHARGE"
                 out_row["price"] = gross.replace("$", "").replace(",", "").strip()
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
             discounted = entry.get("discounted_cash_price")
-            if discounted is not None:
+            if discounted is not None and not "-" in discounted:
                 out_row["payer"] = "CASH PRICE"
                 out_row["price"] = discounted.replace("$", "").replace(",","").strip()
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
             min_price = entry.get("deidentified_min_neg_rate")
-            if min_price is not None:
+            if min_price is not None and not "-" in min_price:
                 out_row["payer"] = "MIN"
                 out_row["price"] = min_price.replace("$", "").replace(",", "").strip()
                 pprint(out_row)
                 csv_writer.writerow(out_row)
             
             max_price = entry.get("deidentified_max_neg_rate")
-            if max_price is not None:
+            if max_price is not None and not "-" in max_price:
                 out_row["payer"] = "MAX"
                 out_row["price"] = max_price.replace("$", "").replace(",", "").strip()
                 pprint(out_row)
@@ -91,7 +91,7 @@ def main():
         
             plan = entry.get("plan")
             plan_price = entry.get("plan_negotiated_rate")
-            if plan_price is not None:
+            if plan_price is not None and not "-" in plan_price:
                 out_row["payer"] = plan
                 out_row["price"] = plan_price.replace("$", "").replace(",", "").strip()
                 pprint(out_row)
