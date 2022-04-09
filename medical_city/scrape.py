@@ -57,12 +57,12 @@ def process_chargemaster(cms_certification_num, url):
             "cms_certification_num": cms_certification_num,
             "payer": "CASH PRICE",
             "code": code,
-            "internal_revenue_code": "NONE",
+            "internal_revenue_code": code_disambiguator,
             "units": "",
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
             "price": discounted,
-            "code_disambiguator": code_disambiguator,
+            "code_disambiguator": "NONE"
         }
 
         pprint(out_row)
@@ -95,9 +95,6 @@ def main():
     for cms_id in targets:
         url = targets[cms_id]
         process_chargemaster(cms_id, url)
-
-
-# update prices set internal_revenue_code = code_disambiguator, code_disambiguator = internal_revenue_code where cms_certification_num in (select cms_certification_num from hospitals where homepage_url = 'https://medicalcityhealthcare.com/home/');
 
 
 if __name__ == "__main__":
