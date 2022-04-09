@@ -62,12 +62,16 @@ def process_chargemaster(cms_certification_num, url):
     csv_writer.writeheader()
 
     for in_row in csv_reader:
-        pprint(in_row)
+        #pprint(in_row)
         payers = list(in_row.keys())[5:]
+        print(payers)
 
         code = in_row.get("CODE")
-        if code == "":
+        if code == "" or code is None:
             code = "NONE"
+
+        code = code.strip()
+        assert len(code) > 0
 
         internal_revenue_code = in_row.get("REV_CODE")
         if internal_revenue_code == "":
@@ -88,9 +92,10 @@ def process_chargemaster(cms_certification_num, url):
 
         for payer in payers:
             price = in_row.get(payer)
-            price = price.strip()
-            if not price.startswith("$"):
+            if price is None or not price.strip().startswith("$"):
                 continue
+
+            price = price.strip()
 
             if payer == " GROSS CHARGE  ":
                 payer = "GROSS CHARGE"
