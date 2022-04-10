@@ -67,17 +67,24 @@ def process_chargemaster(cms_id, url):
         code = data_dict.get("code")
         code_type = data_dict.get("code type")
         payer = data_dict.get("payer")
+        payer_price = data_dict.get("payer-specific negotiated charge")
         gross = data_dict.get("gross charge")
         discounted = data_dict.get("discounted cash price")
         min_price = data_dict.get("de-identified minimum negotiated charge")
         max_price = data_dict.get("de-identified maximum negotiated charge")
         code_disambiguator = "NONE"
 
+        inpatient_outpatient = "UNSPECIFIED"
+        if data_dict.get("patient_class") == "O":
+            inpatient_outpatient = "OUTPATIENT"
+        elif data_dict.get("patient_class") == "I":
+            inpatient_outpatient = "INPATIENT"
+
         row = {
             "cms_certification_num": cms_id,
             "units": "",
             "description": description,
-            "inpatient_outpatient": "UNSPECIFIED",
+            "inpatient_outpatient": inpatient_outpatient,
             "code_disambiguator": str(code_disambiguator),
         }
 
@@ -88,29 +95,36 @@ def process_chargemaster(cms_id, url):
             row["code"] = code
             row["internal_revenue_code"] = "NONE"
 
-        if gross is not None:
+        if gross is not None and gross != "N/A":
             row["payer"] = "GROSS CHARGE"
             row["price"] = gross
             pprint(row)
             csv_writer.writerow(row)
 
-        if discounted is not None:
+        if discounted is not None and discounted != "N/A":
             row["payer"] = "CASH PRICE"
             row["price"] = discounted
             pprint(row)
             csv_writer.writerow(row)
 
-        if min_price is not None:
+        if min_price is not None and min_price != "N/A":
             row["payer"] = "MIN"
             row["price"] = min_price
             pprint(row)
             csv_writer.writerow(row)
 
-        if max_price is not None:
+        if max_price is not None and max_price != "N/A":
             row["payer"] = "MAX"
             row["price"] = max_price
             pprint(row)
             csv_writer.writerow(row)
+
+        if payer is not None and payer_price is not None and payer_price != "N/A":
+            row["payer"] = payer
+            row["price"] = payer_price
+            pprint(row)
+            csv_writer.writerow(row)
+
 
     in_f.close()
     out_f.close()
