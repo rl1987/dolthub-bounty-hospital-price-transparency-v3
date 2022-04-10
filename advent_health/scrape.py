@@ -68,10 +68,10 @@ def process_chargemaster(cms_id, url):
         rev_code = in_row.get("RevCode")
         quantity = ""
 
-        if code == "":
+        if code == "" or code is None:
             code = "NONE"
 
-        if rev_code == "":
+        if rev_code == "" or rev_code is None:
             rev_code = "NONE"
     
         inpatient_outpatient = "UNSPECIFIED"
@@ -111,7 +111,10 @@ def process_chargemaster(cms_id, url):
             price = in_row.get(payer)
             
             if not type(price) == float and not type(price) == int:
-                continue
+                try:
+                    price = float(price)
+                except:
+                    continue
 
             if payer == "Gross Charge":
                 payer = "GROSS CHARGE"
