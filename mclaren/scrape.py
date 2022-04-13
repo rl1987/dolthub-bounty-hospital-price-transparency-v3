@@ -149,15 +149,15 @@ def main():
         csv_writer = csv.DictWriter(out_f, fieldnames=FIELDNAMES)
         csv_writer.writeheader()
 
-        xlsx_url = targets[csm_num]
+        url = targets[csm_num]
 
-        scrape_hospital_data(csm_num, xlsx_url, csv_writer)
+        scrape_hospital_data(csm_num, url, csv_writer)
 
         out_f.close()
 
         h_f.write(
             'UPDATE `hospitals` SET `homepage_url` = "https://www.mclaren.org", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
-                xlsx_url, csm_num
+                url, csm_num
             )
         )
 
