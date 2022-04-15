@@ -79,7 +79,14 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
-    
+ 
+        inpatient_outpatient = "UNSPECIFIED"
+        area = in_row.get("area")
+        if area == "IP":
+            inpatient_outpatient = "INPATIENT"
+        elif area == "OP":
+            inpatient_outpatient = "OUTPATIENT"
+
         out_row = {
             "cms_certification_num": cms_id,
             "code": code,
