@@ -70,7 +70,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         values = list(map(lambda cell: str(cell.value), in_row))
 
-        if values[0] == "Procedure Number" or values[0] == "Charge Code":
+        if values[0] == "Procedure Number" or values[0] == "Charge Code" or values[0] == "CHARGE CODE":
             keys = values
             continue
 
@@ -83,12 +83,20 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
         code_disambiguator = in_row_dict.get("Procedure Number")
         if code_disambiguator is None:
             code_disambiguator = in_row_dict.get("Charge Code")
+        if code_disambiguator is None:
+            code_disambiguator = in_row_dict.get("CHARGE CODE")
 
         if code_disambiguator is None:
             continue
 
         code = in_row_dict.get("CPT Code")
+        if code is None:
+            code = in_row_dict.get("CPT CODE")
+
         modifier = in_row_dict.get("Modifier")
+        if modifier is None:
+            modifier = in_row_dict.get("MODIFIER")
+
         if code is not None and modifier is not None:
             code += "-" + modifier
 
@@ -105,15 +113,24 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             rev_code = in_row_dict.get("UB Code")
 
         if rev_code is None:
+            rev_code = in_row_dict.get("UB CODE")
+
+        if rev_code is None:
             rev_code = "NONE"
 
         description = in_row_dict.get("Description")
+        if description is None:
+            description = in_row_dict.get("DECRIPTION")
+    
         price = in_row_dict.get("Standard Amount")
 
         if price is None:
             price = in_row_dict.get("Amount")
 
-        if price is None or "=SUM" in price:
+        if price is None:
+            price = in_row_dict.get("AMOUNT")
+
+        if price is None or "=SUM" in price or price == "None":
             continue
 
         out_row = {
