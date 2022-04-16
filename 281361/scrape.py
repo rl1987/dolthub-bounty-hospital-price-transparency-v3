@@ -139,9 +139,7 @@ def process_chargemaster(cms_id, url):
 
 def main():
     targets = {
-        "100093": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/baptist",
-        "100266": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/glfbreeze",
-        "100048": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/jay"
+        "281361": "https://lexington.pt.panaceainc.com/MRFDownload/lexington/lexington",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -151,12 +149,10 @@ def main():
         process_chargemaster(cms_id, url)
 
         h_f.write(
-                'UPDATE `hospitals` SET `homepage_url` = "http://www.ebaptisthealthcare.org", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                'UPDATE `hospitals` SET `homepage_url` = "https://lexingtonregional.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
                 url, cms_id
             )
         )
-
-    # TODO: update homepage_url after scraping
 
     h_f.close()
 

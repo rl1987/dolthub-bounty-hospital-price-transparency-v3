@@ -23,11 +23,7 @@ FIELDNAMES = [
 ]
 
 def download_chargemaster(url):
-    resp0 = requests.head(url)
-    url = resp0.headers['Location']
-    resp1 = requests.head(url)
-
-    filename = resp1.headers['Content-Disposition'].split("=")[-1]
+    filename = url.split("/")[-1]
 
     if os.path.isfile(filename):
         print("{} already downloaded".format(filename))
@@ -139,9 +135,7 @@ def process_chargemaster(cms_id, url):
 
 def main():
     targets = {
-        "100093": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/baptist",
-        "100266": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/glfbreeze",
-        "100048": "https://baptisthealthcare.pt.panaceainc.com/MRFDownload/baptisthealthcare/jay"
+        "310058": "https://www.newbridgehealth.org/app/files/public/de061fb8-146e-482a-9986-2bd5fcfe0058/Finance/22-3240487_bergen_standardcharges.csv"
     }
 
     h_f = open("hospitals.sql", "w")
@@ -151,12 +145,10 @@ def main():
         process_chargemaster(cms_id, url)
 
         h_f.write(
-                'UPDATE `hospitals` SET `homepage_url` = "http://www.ebaptisthealthcare.org", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+                'UPDATE `hospitals` SET `homepage_url` = "https://www.newbridgehealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
                 url, cms_id
             )
         )
-
-    # TODO: update homepage_url after scraping
 
     h_f.close()
 
