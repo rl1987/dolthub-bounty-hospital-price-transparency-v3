@@ -80,6 +80,8 @@ def process_chargemaster(cms_id, url):
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
  
+        code = code.replace("'", "")
+
         inpatient_outpatient = "UNSPECIFIED"
         area = in_row.get("area")
         if area == "IP":
@@ -93,7 +95,7 @@ def process_chargemaster(cms_id, url):
             "internal_revenue_code": rev_code,
             "units": quantity,
             "description": description,
-            "inpatient_outpatient": "UNSPECIFIED",
+            "inpatient_outpatient": inpatient_outpatient,
             "code_disambiguator": "NONE",
         }
 
