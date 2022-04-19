@@ -22,12 +22,13 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     resp0 = requests.head(url)
-    url = resp0.headers['Location']
+    url = resp0.headers["Location"]
     resp1 = requests.head(url)
 
-    filename = resp1.headers['Content-Disposition'].split("=")[-1]
+    filename = resp1.headers["Content-Disposition"].split("=")[-1]
 
     if os.path.isfile(filename):
         print("{} already downloaded".format(filename))
@@ -44,8 +45,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def fix_price(price_str):
     return price_str.replace("$", "").replace(",", "")
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -79,7 +82,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
- 
+
         code = code.replace("'", "")
 
         inpatient_outpatient = "UNSPECIFIED"
@@ -138,6 +141,7 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
         "260081": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/st-clare-fenton",
@@ -153,7 +157,7 @@ def main():
         "520057": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/st-clare-baraboo",
         "520083": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/st-marys-madison",
         "520208": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/st-marys-janesville",
-        "521327": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/waupun-memorial"
+        "521327": "https://ssmhealth.pt.panaceainc.com/MRFDownload/ssmhealth/waupun-memorial",
     }
 
     h_f = open("hospitals.sql", "w")

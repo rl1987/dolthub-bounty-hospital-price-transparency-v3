@@ -22,6 +22,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -39,6 +40,7 @@ def download_chargemaster(url):
                 f.write(chunk)
 
     return filename
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -73,7 +75,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
-    
+
         inpatient_outpatient = "UNSPECIFIED"
 
         if in_row.get("type") == "Inpatient":
@@ -109,7 +111,7 @@ def process_chargemaster(cms_id, url):
 
         for payer in payers:
             price = in_row.get(payer)
-            
+
             if not type(price) == float and not type(price) == int:
                 try:
                     price = float(price)
@@ -134,6 +136,7 @@ def process_chargemaster(cms_id, url):
 
     in_f.close()
     out_f.close()
+
 
 def main():
     targets = {
@@ -163,7 +166,7 @@ def main():
         "180043": "https://www.adventhealth.com/sites/default/files/CDM/2022/610594620_AdventHealthManchester_standardcharges.json",
         "450152": "https://www.adventhealth.com/sites/default/files/CDM/2022/742575462_AdventHealthCentral%20Texas_standardcharges.json",
         "451323": "https://www.adventhealth.com/sites/default/files/CDM/2022/742225672_AdventHealthRollinsBrook_standardcharges.json",
-        "521307": "https://www.adventhealth.com/sites/default/files/CDM/2022/391365168_AdventHealthDurand_standardcharges.json"
+        "521307": "https://www.adventhealth.com/sites/default/files/CDM/2022/391365168_AdventHealthDurand_standardcharges.json",
     }
 
     h_f = open("hospitals.sql", "w")

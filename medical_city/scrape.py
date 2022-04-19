@@ -62,7 +62,7 @@ def process_chargemaster(cms_certification_num, url):
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
             "price": discounted,
-            "code_disambiguator": "NONE"
+            "code_disambiguator": "NONE",
         }
 
         pprint(out_row)

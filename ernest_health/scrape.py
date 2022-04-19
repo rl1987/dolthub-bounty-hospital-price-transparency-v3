@@ -20,10 +20,11 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
-    #if os.path.isfile(filename):
+    # if os.path.isfile(filename):
     #    print("{} already downloaded".format(filename))
     #    return filename
 
@@ -42,15 +43,20 @@ def download_chargemaster(url):
             if n.endswith("/"):
                 continue
 
-            if ("Procedure Master" in n.split("/")[-1] or "chrg mstr" in n.split("/")[-1] or "CDM" in n.split("/")[-1]) and n.endswith(".xlsx"):
+            if (
+                "Procedure Master" in n.split("/")[-1]
+                or "chrg mstr" in n.split("/")[-1]
+                or "CDM" in n.split("/")[-1]
+            ) and n.endswith(".xlsx"):
                 print("Extracting {} from {}".format(n, filename))
-                filename = n.split('/')[-1]
+                filename = n.split("/")[-1]
                 filename = z_f.extract(n, filename)
                 break
 
         z_f.close()
 
     return filename
+
 
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     filename = download_chargemaster(xlsx_url)
@@ -70,7 +76,11 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         values = list(map(lambda cell: str(cell.value), in_row))
 
-        if values[0] == "Procedure Number" or values[0] == "Charge Code" or values[0] == "CHARGE CODE":
+        if (
+            values[0] == "Procedure Number"
+            or values[0] == "Charge Code"
+            or values[0] == "CHARGE CODE"
+        ):
             keys = values
             continue
 
@@ -121,7 +131,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
         description = in_row_dict.get("Description")
         if description is None:
             description = in_row_dict.get("DECRIPTION")
-    
+
         price = in_row_dict.get("Standard Amount")
 
         if price is None:
@@ -142,13 +152,14 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             "description": description,
             "inpatient_outpatient": "UNSPECIFIED",
             "price": price,
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         pprint(out_row)
         csv_writer.writerow(out_row)
 
     out_f.close()
+
 
 def main():
     targets = {
@@ -176,7 +187,7 @@ def main():
         "423031": "https://sri.ernesthealth.com/wp-content/uploads/2022/01/SRI_Chargemaster.zip",
         "673063": "https://trhl.ernesthealth.com/wp-content/uploads/2022/01/TRHL_Chargemaster.zip",
         "462005": "https://uvsh.ernesthealth.com/wp-content/uploads/2022/01/Utah-Valley-Specialty-Charge-Master-120040.xlsx",
-        "453091": "https://wrrh.ernesthealth.com/wp-content/uploads/2022/01/WRRH_Chargemaster.zip"
+        "453091": "https://wrrh.ernesthealth.com/wp-content/uploads/2022/01/WRRH_Chargemaster.zip",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -194,7 +205,7 @@ def main():
         out_f.close()
         h_f.write(
             'UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
-                xlsx_url.split('/wp-content/')[0], xlsx_url, csm_num
+                xlsx_url.split("/wp-content/")[0], xlsx_url, csm_num
             )
         )
 

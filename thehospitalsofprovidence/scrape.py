@@ -22,6 +22,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -39,6 +40,7 @@ def download_chargemaster(url):
                 f.write(chunk)
 
     return filename
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -125,16 +127,16 @@ def process_chargemaster(cms_id, url):
             pprint(row)
             csv_writer.writerow(row)
 
-
     in_f.close()
     out_f.close()
+
 
 def main():
     targets = {
         "450002": "https://www.thehospitalsofprovidence.com/docs/global/standard-charges/954537720_thehospitalsofprovidencememorialcampus_standardcharges.json?sfvrsn=4b2ad6a7_8&download=true",
         "670047": "https://www.thehospitalsofprovidence.com/docs/global/standard-charges/954537720_thehospitalsofprovidenceeastcampus_standardcharges.json?sfvrsn=2b76b1e7_8&download=true",
         "670120": "https://www.thehospitalsofprovidence.com/docs/global/standard-charges/954537720_thehospitalofprovidencetransmountaincampus_standardcharges.json?sfvrsn=fd47d09f_8&download=true",
-        "450668": "https://www.thehospitalsofprovidence.com/docs/global/standard-charges/954537720_thehospitalsofprovidencesierracampus_standardcharges.json?sfvrsn=803dfdaa_8&download=true"
+        "450668": "https://www.thehospitalsofprovidence.com/docs/global/standard-charges/954537720_thehospitalsofprovidencesierracampus_standardcharges.json?sfvrsn=803dfdaa_8&download=true",
     }
 
     h_f = open("hospitals.sql", "w")

@@ -74,7 +74,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             rev_code = "NONE"
 
         inpatient_outpatient = "UNSPECIFIED"
-        
+
         billing_category = in_row_dict.get("Billing Category")
         if billing_category is not None and "Inpatient" in billing_category:
             inpatient_outpatient = "INPATIENT"
@@ -92,7 +92,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
             "inpatient_outpatient": inpatient_outpatient,
             "payer": "GROSS CHARGE",
             "price": gross,
-            "code_disambiguator": code_disambiguator
+            "code_disambiguator": code_disambiguator,
         }
 
         pprint(out_row)

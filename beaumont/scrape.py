@@ -21,6 +21,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -38,6 +39,7 @@ def download_chargemaster(url):
                 f.write(chunk)
 
     return filename
+
 
 def fix_price(price_str):
     price_str = price_str.replace("$", "").replace(",", "").strip()
@@ -62,7 +64,7 @@ def process_chargemaster(cms_certification_num, url):
     csv_writer.writeheader()
 
     for in_row in csv_reader:
-        #pprint(in_row)
+        # pprint(in_row)
         payers = list(in_row.keys())[5:]
         print(payers)
 
@@ -117,6 +119,7 @@ def process_chargemaster(cms_certification_num, url):
     out_f.close()
     in_f.close()
 
+
 def main():
     http.client.HTTPConnection.debuglevel = 1
 
@@ -134,7 +137,7 @@ def main():
         "230269": "https://www.beaumont.org/docs/default-source/default-document-library/cdm-documents/2022/hospital-charges/381459362_beaumont-hospital-troy_hospital-standardcharges.csv?sfvrsn=c8427dfb_2&download=true",
         "230270": "https://www.beaumont.org/docs/default-source/default-document-library/cdm-documents/2022/hospital-charges/381405141_beaumont-hospital-taylor_hospital-standardcharges.csv?sfvrsn=f4427dfb_2&download=true",
         "230020": "https://www.beaumont.org/docs/default-source/default-document-library/cdm-documents/2022/hospital-charges/381405141_beaumont-hospital-dearborn_hospital-standardcharges.csv?sfvrsn=cc427dfb_2&download=true",
-        "230089": "https://www.beaumont.org/docs/default-source/default-document-library/cdm-documents/2022/hospital-charges/381459362_beaumont-hospital-grosse-pointe_hospital-standardcharges.csv?sfvrsn=f8427dfb_2&download=true"
+        "230089": "https://www.beaumont.org/docs/default-source/default-document-library/cdm-documents/2022/hospital-charges/381459362_beaumont-hospital-grosse-pointe_hospital-standardcharges.csv?sfvrsn=f8427dfb_2&download=true",
     }
 
     h_f = open("hospitals.sql", "w")

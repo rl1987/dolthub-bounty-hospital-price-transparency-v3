@@ -34,7 +34,7 @@ def process_chargemaster(cms_certification_num, url):
 
     for in_row in csv_reader:
         payers = in_row.get("Insurance Plan(s)").split(", ")
-        
+
         code = in_row.get("CPT / HCPCS Code")
         if code == "" or code is None:
             code = "NONE"
@@ -57,37 +57,37 @@ def process_chargemaster(cms_certification_num, url):
 
         gross = in_row.get("Charge")
         if gross != "" and not "-" in gross and gross != "#N/A":
-            out_row['payer'] = "GROSS CHARGE"
-            out_row['price'] = gross.strip().replace(",", "")
+            out_row["payer"] = "GROSS CHARGE"
+            out_row["price"] = gross.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         discounted = in_row.get("Cash Discount Expected Reimbursement")
         if discounted != "" and not "-" in discounted and discounted != "#N/A":
-            out_row['payer'] = "CASH PRICE"
-            out_row['price'] = discounted.strip().replace(",", "")
+            out_row["payer"] = "CASH PRICE"
+            out_row["price"] = discounted.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         min_price = in_row.get("All Plans Minimum Expected Reimbursement")
         if min_price != "" and not "-" in min_price:
-            out_row['payer'] = "MIN"
-            out_row['price'] = min_price.strip().replace(",", "")
+            out_row["payer"] = "MIN"
+            out_row["price"] = min_price.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         max_price = in_row.get("All Plans Maximum Expected Reimbursement")
         if min_price != "" and not "-" in min_price:
-            out_row['payer'] = "MAX"
-            out_row['price'] = max_price.strip().replace(",", "")
+            out_row["payer"] = "MAX"
+            out_row["price"] = max_price.strip().replace(",", "")
             pprint(out_row)
             csv_writer.writerow(out_row)
 
         plan_price = in_row.get("Plan Expected Reimbursement")
         if plan_price != "" and not "-" in plan_price:
             for payer in payers:
-                out_row['payer'] = payer
-                out_row['price'] = plan_price.strip().replace(",", "")
+                out_row["payer"] = payer
+                out_row["price"] = plan_price.strip().replace(",", "")
                 pprint(out_row)
                 csv_writer.writerow(out_row)
 
@@ -100,7 +100,7 @@ def main():
         "501340": "https://app.peacehealth.org/FileRepository/Financial/StandardCharges/PIMC/38-3868360_Peace_Island_Medical_Center_StandardCharges.csv",
         "381301": "https://app.peacehealth.org/FileRepository/Financial/StandardCharges/CGMC/93-1279544_Cottage_Grove_Community_Medical_Center_StandardCharges.csv",
         "500041": "https://app.peacehealth.org/FileRepository/Financial/StandardCharges/STJN/91-0564987_St_John_Medical_Center_StandardCharges.csv",
-        "500050": "https://app.peacehealth.org/FileRepository/Financial/StandardCharges/SWMC/91-6068143_Southwest_Medical_Center_StandardCharges.csv"
+        "500050": "https://app.peacehealth.org/FileRepository/Financial/StandardCharges/SWMC/91-6068143_Southwest_Medical_Center_StandardCharges.csv",
     }
 
     h_f = open("hospitals.sql", "w")

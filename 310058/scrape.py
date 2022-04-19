@@ -22,6 +22,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -40,8 +41,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def fix_price(price_str):
     return price_str.replace("$", "").replace(",", "").strip()
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -76,7 +79,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
- 
+
         inpatient_outpatient = "UNSPECIFIED"
         area = in_row.get("area")
         if area == "IP":
@@ -133,6 +136,7 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
         "310058": "https://www.newbridgehealth.org/app/files/public/de061fb8-146e-482a-9986-2bd5fcfe0058/Finance/22-3240487_bergen_standardcharges.csv"
@@ -145,7 +149,7 @@ def main():
         process_chargemaster(cms_id, url)
 
         h_f.write(
-                'UPDATE `hospitals` SET `homepage_url` = "https://www.newbridgehealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+            'UPDATE `hospitals` SET `homepage_url` = "https://www.newbridgehealth.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
                 url, cms_id
             )
         )

@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -38,8 +39,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def isnumber(s):
     return s.replace(".", "").isdigit()
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)

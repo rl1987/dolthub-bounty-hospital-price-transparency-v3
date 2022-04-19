@@ -33,7 +33,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
     resp = requests.get(xlsx_url)
     print(resp)
     print(resp.url)
-    
+
     s_f = StringIO(resp.text)
 
     csv_reader = csv.DictReader(s_f)
@@ -88,7 +88,14 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
         for payer in payers:
             price = in_row_dict.get(payer)
-            if price == "" or price is None or "%" in price or price == "Need Rates" or price == "Case Rate" or price == "Exclusion":
+            if (
+                price == ""
+                or price is None
+                or "%" in price
+                or price == "Need Rates"
+                or price == "Case Rate"
+                or price == "Exclusion"
+            ):
                 continue
 
             price = str(price)
@@ -132,13 +139,13 @@ def main():
         "230207": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1428164_McLarenOakland_standardcharges.csv",
         "230216": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1369611_McLarenPortHuron_standardcharges.csv",
         "230227": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1218516_McLarenMacomb_standardcharges.csv",
-        "231329": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-3426063_McLarenCaroCommunityHospital_standardcharges.csv", 
+        "231329": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-3426063_McLarenCaroCommunityHospital_standardcharges.csv",
         "232020": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-3161753_McLarenBaySpecialCare_standardcharges.csv",
         "230041": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1976271_McLarenBayRegion_standardcharges.csv",
         "230080": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1420304_McLarenCentral_standardcharges.csv",
         "230105": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-2146751_McLarenNorthernMichigan_standardcharges.csv",
-        "230118": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1474929_McLarenThumbRegion_standardcharges.csv", # !!!
-        "230297": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1613280_KarmanosCancerInstitute_standardcharges.csv"
+        "230118": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1474929_McLarenThumbRegion_standardcharges.csv",  # !!!
+        "230297": "https://www.mclaren.org/Uploads/Public/Documents/corporate/ChargeMasterFile/2022/38-1613280_KarmanosCancerInstitute_standardcharges.csv",
     }
 
     h_f = open("hospitals.sql", "w")

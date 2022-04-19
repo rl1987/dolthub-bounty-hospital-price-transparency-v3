@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def scrape_sheet(cms_certification_num, ws, inpatient_outpatient):
     keys = None
 
@@ -67,14 +68,14 @@ def scrape_sheet(cms_certification_num, ws, inpatient_outpatient):
             "units": "",
             "description": description,
             "inpatient_outpatient": inpatient_outpatient,
-            "code_disambiguator": "NONE"
+            "code_disambiguator": "NONE",
         }
 
         if in_row_dict.get("Unit Price") is not None:
             payer = "GROSS CHARGE"
             price = in_row_dict.get("Unit Price")
-            out_row['payer'] = payer
-            out_row['price'] = price
+            out_row["payer"] = payer
+            out_row["price"] = price
             yield out_row
 
         if in_row_dict.get("Discount Cash Price") is not None:
@@ -91,9 +92,10 @@ def scrape_sheet(cms_certification_num, ws, inpatient_outpatient):
         else:
             continue
 
-        out_row['payer'] = payer
-        out_row['price'] = price
+        out_row["payer"] = payer
+        out_row["price"] = price
         yield out_row
+
 
 def scrape_hospital_data(cms_certification_num, url):
     out_f = open("{}.csv".format(cms_certification_num), "w", encoding="utf-8")
@@ -126,6 +128,7 @@ def scrape_hospital_data(cms_certification_num, url):
 
     out_f.close()
 
+
 def main():
     targets = {
         "340109": "https://www.sentara.com/Assets/CSV/463846081_sentara-albemarle-medical-center_standardcharges.xlsx",
@@ -139,8 +142,8 @@ def main():
         "490077": "https://www.sentara.com/Assets/CSV/540261840_sentara-martha-jefferson-hospital_standardcharges.xlsx",
         "490093": "https://www.sentara.com/Assets/CSV/541547408_sentara-careplex-hospital_standardcharges.xlsx",
         "490113": "https://www.sentara.com/Assets/CSV/540853898_sentara-northern-virginia-medical-center_standardcharges.xlsx",
-        "490119": "https://www.sentara.com/Assets/CSV/273208969_sentara-princess-anne-hospital_standardcharges.xlsx"
-   }
+        "490119": "https://www.sentara.com/Assets/CSV/273208969_sentara-princess-anne-hospital_standardcharges.xlsx",
+    }
 
     h_f = open("hospitals.sql", "w")
 

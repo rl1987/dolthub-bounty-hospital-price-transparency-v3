@@ -22,12 +22,13 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     resp0 = requests.head(url)
-    url = resp0.headers['Location']
+    url = resp0.headers["Location"]
     resp1 = requests.head(url)
 
-    filename = resp1.headers['Content-Disposition'].split("=")[-1]
+    filename = resp1.headers["Content-Disposition"].split("=")[-1]
 
     if os.path.isfile(filename):
         print("{} already downloaded".format(filename))
@@ -44,8 +45,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def fix_price(price_str):
     return price_str.replace("$", "").replace(",", "")
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -81,7 +84,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
- 
+
         inpatient_outpatient = "UNSPECIFIED"
         area = in_row.get("area")
         if area == "IP":
@@ -138,6 +141,7 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
         "121300": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/kauai",
@@ -147,7 +151,7 @@ def main():
         "121301": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/kau",
         "120019": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/kch",
         "121302": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/kohala",
-        "122001": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/leahi"
+        "122001": "https://hhsc.pt.panaceainc.com/MRFDownload/hhsc/leahi",
     }
 
     h_f = open("hospitals.sql", "w")

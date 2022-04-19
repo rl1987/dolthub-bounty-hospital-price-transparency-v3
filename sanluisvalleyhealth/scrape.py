@@ -22,12 +22,13 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     resp0 = requests.head(url)
-    url = resp0.headers['Location']
+    url = resp0.headers["Location"]
     resp1 = requests.head(url)
 
-    filename = resp1.headers['Content-Disposition'].split("=")[-1]
+    filename = resp1.headers["Content-Disposition"].split("=")[-1]
 
     if os.path.isfile(filename):
         print("{} already downloaded".format(filename))
@@ -44,8 +45,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def fix_price(price_str):
     return price_str.replace("$", "").replace(",", "").strip()
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -78,7 +81,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
- 
+
         inpatient_outpatient = "UNSPECIFIED"
         area = in_row.get("area")
         if area == "IP":
@@ -135,10 +138,11 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
         "060008": "https://sanluis.pt.panaceainc.com/MRFDownload/sanluis/slvhealth",
-        "061308": "https://sanluis.pt.panaceainc.com/MRFDownload/sanluis/conejos"
+        "061308": "https://sanluis.pt.panaceainc.com/MRFDownload/sanluis/conejos",
     }
 
     h_f = open("hospitals.sql", "w")

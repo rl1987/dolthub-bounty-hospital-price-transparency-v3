@@ -20,6 +20,7 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     filename = url.split("/")[-1]
 
@@ -37,6 +38,7 @@ def download_chargemaster(url):
                 f.write(chunk)
 
     return filename
+
 
 # XXX: for some reason this cuts off the first digit of cms_certification_num on the first row
 def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
@@ -96,6 +98,7 @@ def scrape_hospital_data(cms_certification_num, xlsx_url, csv_writer):
 
     out_f.close()
 
+
 def main():
     targets = {
         "132002": "https://vhboise.com/wp-content/uploads/sites/24/2021/12/Boise-CDM-DECEMBER-2021.xls",
@@ -112,10 +115,10 @@ def main():
         "422005": "https://vhcharleston.com/wp-content/uploads/sites/26/2021/12/Charleston-CDM-DECEMBER-2021.xls",
         "362023": "https://vhmvalley.com/wp-content/uploads/sites/29/2021/12/Mahoning-Valley-Boardman-CDM-DECEMBER-2021.xls",
         "452060": "https://vhamarillo.com/wp-content/uploads/sites/2/2021/12/Amarillo-CDM-DECEMBER-2021.xls",
-        #"452097": "https://vshdesoto.com/wp-content/uploads/sites/38/2021/12/Desoto_Rich-Facility-Proc-Master-220170.xlsx",
+        # "452097": "https://vshdesoto.com/wp-content/uploads/sites/38/2021/12/Desoto_Rich-Facility-Proc-Master-220170.xlsx",
         "453096": "https://vrhamarillo.com/wp-content/uploads/sites/19/2021/12/Rehabilitation-Hospital-of-Amarillo-CDM-DECEMBER-2021.xls",
         "152028": "https://vhnwindiana.com/wp-content/uploads/sites/31/2021/12/Merrillville-CDM-DECEMBER-2021.xls",
-        "492009": "https://vhrichmond.com/wp-content/uploads/sites/33/2021/12/Richmond-CDM-DECEMBER-2021.xls"
+        "492009": "https://vhrichmond.com/wp-content/uploads/sites/33/2021/12/Richmond-CDM-DECEMBER-2021.xls",
     }
 
     h_f = open("hospitals.sql", "w")
@@ -133,7 +136,7 @@ def main():
         out_f.close()
         h_f.write(
             'UPDATE `hospitals` SET `homepage_url` = "{}", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
-                xlsx_url.split('/wp-content/')[0], xlsx_url, csm_num
+                xlsx_url.split("/wp-content/")[0], xlsx_url, csm_num
             )
         )
 

@@ -20,10 +20,11 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def process_chargemaster(cms_id, url):
     resp = requests.get(url)
     print(resp.url)
-    
+
     begins_at = resp.text.find(" Description of Item or Service")
 
     s_f = StringIO(resp.text[begins_at:])
@@ -34,14 +35,19 @@ def process_chargemaster(cms_id, url):
     csv_writer.writeheader()
 
     csv_reader = csv.DictReader(s_f, delimiter="\t")
-    
+
     for in_row in csv_reader:
         code = in_row.get(" CPT/HCPCS/ DRG Code ").strip()
         description = in_row.get(" Description of Item or Service ").strip()
         rev_code = in_row.get(" Revenue Code ").strip()
         quantity = in_row.get(" ERx Charge Quantity ").strip()
         gross = in_row.get(" Gross Charge ").replace("$", "").replace(",", "").strip()
-        discounted = in_row.get(" Discounted Cash Price ").replace("$", "").replace(",", "").strip()
+        discounted = (
+            in_row.get(" Discounted Cash Price ")
+            .replace("$", "")
+            .replace(",", "")
+            .strip()
+        )
 
         if code == "":
             code = "NONE"
@@ -97,6 +103,7 @@ def process_chargemaster(cms_id, url):
 
     out_f.close()
 
+
 def main():
     targets = {
         "231309": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/260806477_aspirus-ontonagon-hospital_standardcharges.json",
@@ -109,7 +116,7 @@ def main():
         "521324": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/390964813_aspirus-medford-hospital_standardcharges.json",
         "521350": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/390806429_aspirus-langlade-hospital_standardcharges.json",
         "521300": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/390985690_aspirus-eagleriver-hospital_standardcharges.JSON",
-        "520091": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/390873606_aspirus-howardyoung-medical-center_standardcharges.JSON"
+        "520091": "https://www.aspirus.org/Uploads/Public/Documents/Bill/StandardCharges/390873606_aspirus-howardyoung-medical-center_standardcharges.JSON",
     }
 
     h_f = open("hospitals.sql", "w")

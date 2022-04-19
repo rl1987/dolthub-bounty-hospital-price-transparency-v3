@@ -22,12 +22,13 @@ FIELDNAMES = [
     "code_disambiguator",
 ]
 
+
 def download_chargemaster(url):
     resp0 = requests.head(url)
-    url = resp0.headers['Location']
+    url = resp0.headers["Location"]
     resp1 = requests.head(url)
 
-    filename = resp1.headers['Content-Disposition'].split("=")[-1]
+    filename = resp1.headers["Content-Disposition"].split("=")[-1]
 
     if os.path.isfile(filename):
         print("{} already downloaded".format(filename))
@@ -44,8 +45,10 @@ def download_chargemaster(url):
 
     return filename
 
+
 def fix_price(price_str):
     return price_str.replace("$", "").replace(",", "").strip()
+
 
 def process_chargemaster(cms_id, url):
     filename = download_chargemaster(url)
@@ -80,7 +83,7 @@ def process_chargemaster(cms_id, url):
 
         if rev_code == "" or rev_code is None:
             rev_code = "NONE"
- 
+
         inpatient_outpatient = "UNSPECIFIED"
         area = in_row.get("area")
         if area == "IP":
@@ -137,6 +140,7 @@ def process_chargemaster(cms_id, url):
     in_f.close()
     out_f.close()
 
+
 def main():
     targets = {
         "281361": "https://lexington.pt.panaceainc.com/MRFDownload/lexington/lexington",
@@ -149,7 +153,7 @@ def main():
         process_chargemaster(cms_id, url)
 
         h_f.write(
-                'UPDATE `hospitals` SET `homepage_url` = "https://lexingtonregional.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
+            'UPDATE `hospitals` SET `homepage_url` = "https://lexingtonregional.org/", `chargemaster_url` = "{}", `last_edited_by_username` = "rl1987" WHERE `cms_certification_num` = "{}";\n'.format(
                 url, cms_id
             )
         )
