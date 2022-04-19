@@ -211,6 +211,7 @@ def main():
 
     h_f.close()
 
+# UPDATE prices SET code = TRIM(TRAILING '-' FROM code) WHERE code LIKE "%-" AND cms_certification_num IN (SELECT cms_certification_num FROM hospitals WHERE homepage_url LIKE "%ernest%");
 
 if __name__ == "__main__":
     main()
